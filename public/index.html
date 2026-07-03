@@ -438,128 +438,139 @@
 
   <script src="api.js"></script>
   <script>
-    let activeTag = 'all';
-    let isInitialLoad = true;
+	let active_tag = 'all';
+	let is_initial_load = true;
 
-    async function renderTags() {
-      const essays = await getEssays();
-      const tags = await getAllTags();
-      const tagList = document.getElementById('tagList');
-      
-      document.getElementById('allCount').innerText = essays.length;
-      
-      tagList.innerHTML = `
-        <button class="tag-btn ${activeTag === 'all' ? 'active' : ''}" onclick="filterByTag('all')">
-          <span>Alle</span>
-          <span class="tag-btn-count">${essays.length}</span>
-        </button>
-      `;
+	/**
+	 * Renders tag buttons at the top of the index page.
+	 * @returns {Promise<void>}
+	 */
+	async function render_tags() {
+		const essays = await get_essays();
+		const tags = await get_all_tags();
+		const tag_list = document.getElementById('tagList');
+		
+		document.getElementById('allCount').innerText = essays.length;
+		
+		tag_list.innerHTML = `
+			<button class="tag-btn ${active_tag === 'all' ? 'active' : ''}" onclick="filter_by_tag('all')">
+				<span>Alle</span>
+				<span class="tag-btn-count">${essays.length}</span>
+			</button>
+		`;
 
-      tags.forEach(tag => {
-        const count = essays.filter(e => e.tags.includes(tag)).length;
-        tagList.innerHTML += `
-          <button class="tag-btn ${activeTag === tag ? 'active' : ''}" onclick="filterByTag('${tag}')">
-            <span># ${tag}</span>
-            <span class="tag-btn-count">${count}</span>
-          </button>
-        `;
-      });
-    }
+		tags.forEach(tag => {
+			const count = essays.filter(e => e.tags.includes(tag)).length;
+			tag_list.innerHTML += `
+				<button class="tag-btn ${active_tag === tag ? 'active' : ''}" onclick="filter_by_tag('${tag}')">
+					<span># ${tag}</span>
+					<span class="tag-btn-count">${count}</span>
+				</button>
+			`;
+		});
+	}
 
-    async function renderEssays() {
-      const essays = await getEssays();
-      const list = document.getElementById('essayList');
-      list.innerHTML = '';
+	/**
+	 * Renders the filtered essay cards to the DOM.
+	 * @returns {Promise<void>}
+	 */
+	async function render_essays() {
+		const essays = await get_essays();
+		const list = document.getElementById('essayList');
+		list.innerHTML = '';
 
-      const filtered = activeTag === 'all' 
-        ? essays 
-        : essays.filter(e => e.tags.includes(activeTag));
+		const filtered = active_tag === 'all' 
+			? essays 
+			: essays.filter(e => e.tags.includes(active_tag));
 
-      if (filtered.length === 0) {
-        list.innerHTML = `
-          <div style="text-align: center; padding: 60px; color: var(--muted); border: 1px dashed var(--border); font-family: var(--font-mono); border-radius: var(--radius-lg); background: var(--surface);">
-            Keine Gedanken in dieser Kategorie gefunden.
-          </div>
-        `;
-        return;
-      }
+		if (filtered.length === 0) {
+			list.innerHTML = `
+				<div style="text-align: center; padding: 60px; color: var(--muted); border: 1px dashed var(--border); font-family: var(--font-mono); border-radius: var(--radius-lg); background: var(--surface);">
+					Keine Gedanken in dieser Kategorie gefunden.
+				</div>
+			`;
+			return;
+		}
 
-      filtered.forEach((essay, index) => {
-        const tagHTML = essay.tags.map(t => `<span class="essay-tag" role="button" tabindex="0" onclick="event.stopPropagation(); event.preventDefault(); filterByTag('${t}')">${t}</span>`).join(' <span class="tag-separator">/</span> ');
-        
-        // Text kürzen
-        const previewText = essay.content.length > 220 
-          ? essay.content.substring(0, 220) + '...' 
-          : essay.content;
+		filtered.forEach((essay, index) => {
+			const tag_html = essay.tags.map(t => `<span class="essay-tag" role="button" tabindex="0" onclick="event.stopPropagation(); event.preventDefault(); filter_by_tag('${t}')">${t}</span>`).join(' <span class="tag-separator">/</span> ');
+			
+			// Safe preview text logic
+			const preview_text = (essay.content && essay.content.length > 220)
+				? essay.content.substring(0, 220) + '...' 
+				: (essay.content || '');
 
-        const staggerClass = isInitialLoad ? 'reveal-item' : '';
-        const staggerStyle = isInitialLoad ? `animation-delay: ${(index * 60) + 400}ms;` : '';
+			const stagger_class = is_initial_load ? 'reveal-item' : '';
+			const stagger_style = is_initial_load ? `animation-delay: ${(index * 60) + 400}ms;` : '';
 
-        // Formatted Date based on ID (static mapper or timestamp conversion)
-        let dateText;
-        if (essay.id === "1") {
-          dateText = "28. Mai 2026";
-        } else if (essay.id === "2") {
-          dateText = "15. April 2026";
-        } else if (essay.id === "3") {
-          dateText = "04. März 2026";
-        } else {
-          const timestamp = parseInt(essay.id);
-          if (!isNaN(timestamp)) {
-            dateText = new Date(timestamp).toLocaleDateString('de-DE', {year: 'numeric', month: 'long', day: 'numeric'});
-          } else {
-            dateText = "Kürzlich veröffentlicht";
-          }
-        }
+			let date_text;
+			if (essay.id === 1 || essay.id === "1") {
+				date_text = "28. Mai 2026";
+			} else if (essay.id === 2 || essay.id === "2") {
+				date_text = "15. April 2026";
+			} else if (essay.id === 3 || essay.id === "3") {
+				date_text = "04. März 2026";
+			} else {
+				const timestamp = parseInt(essay.id);
+				if (!isNaN(timestamp)) {
+					date_text = new Date(timestamp).toLocaleDateString('de-DE', {year: 'numeric', month: 'long', day: 'numeric'});
+				} else {
+					date_text = "Kürzlich veröffentlicht";
+				}
+			}
 
-        list.innerHTML += `
-          <a class="essay-card ${staggerClass}" style="${staggerStyle} view-transition-name: card-${essay.id};" href="read.html?id=${essay.id}" data-od-id="card-${essay.id}">
-            <div class="card-top">
-              <span class="card-readtime">${essay.readTime} Lesezeit</span>
-              <time class="card-date">${dateText}</time>
-            </div>
-            <h2 class="card-title">${essay.title}</h2>
-            <p class="card-preview">${previewText}</p>
-            <div class="card-bottom">
-              ${tagHTML}
-            </div>
-          </a>
-        `;
-      });
-    }
+			list.innerHTML += `
+				<a class="essay-card ${stagger_class}" style="${stagger_style} view-transition-name: card-${essay.id};" href="read.html?id=${essay.id}" data-od-id="card-${essay.id}">
+					<div class="card-top">
+						<span class="card-readtime">${essay.read_time || 0} Min Lesezeit</span>
+						<time class="card-date">${date_text}</time>
+					</div>
+					<h2 class="card-title">${essay.title}</h2>
+					<p class="card-preview">${preview_text}</p>
+					<div class="card-bottom">
+						${tag_html}
+					</div>
+				</a>
+			`;
+		});
+	}
 
-    function filterByTag(tag) {
-      activeTag = tag;
-      if (document.startViewTransition) {
-        document.startViewTransition(() => {
-          renderTags();
-          renderEssays();
-        });
-      } else {
-        renderTags();
-        renderEssays();
-      }
-    }
+	/**
+	 * Filters essays and tags based on selected tag.
+	 * @param {string} tag - The tag to filter by.
+	 */
+	function filter_by_tag(tag) {
+		active_tag = tag;
+		if (document.startViewTransition) {
+			document.startViewTransition(() => {
+				render_tags();
+				render_essays();
+			});
+		} else {
+			render_tags();
+			render_essays();
+		}
+	}
 
-    // Init
-    document.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const tagParam = urlParams.get('tag');
-      if (tagParam) {
-        activeTag = tagParam;
-      }
-      renderTags();
-      renderEssays();
-      
-      // Clean up reveal animations after initial page entrance
-      setTimeout(() => {
-        isInitialLoad = false;
-        document.querySelectorAll('.reveal-item').forEach(el => {
-          el.classList.remove('reveal-item', 'reveal-delay-1', 'reveal-delay-2', 'reveal-delay-3', 'reveal-delay-4', 'reveal-delay-5');
-          el.style.opacity = '1';
-        });
-      }, 1500);
-    });
+	// Initialization
+	document.addEventListener('DOMContentLoaded', () => {
+		const url_params = new URLSearchParams(window.location.search);
+		const tag_param = url_params.get('tag');
+		if (tag_param) {
+			active_tag = tag_param;
+		}
+		render_tags();
+		render_essays();
+		
+		// Clean up reveal animations after initial page entrance
+		setTimeout(() => {
+			is_initial_load = false;
+			document.querySelectorAll('.reveal-item').forEach(el => {
+				el.classList.remove('reveal-item', 'reveal-delay-1', 'reveal-delay-2', 'reveal-delay-3', 'reveal-delay-4', 'reveal-delay-5');
+				el.style.opacity = '1';
+			});
+		}, 1500);
+	});
   </script>
 </body>
 </html>

@@ -1,3 +1,4 @@
-- überarbeiten Styling und Frontend seiten refactorn
+- Listen der Artickel die eingetragen worden auf der Übersichtsseite.
+- überarbeiten Styling und Frontend seiten refactorn.
 - Nicht einfach das Kopierte Design kopieren. Lieber neu erstellen mit bestehendem Design als Vorlage.
 - Testabdeckung

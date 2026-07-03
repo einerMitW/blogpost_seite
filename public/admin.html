@@ -435,129 +435,160 @@
 
   <script src="api.js"></script>
   <script>
-    const AUTH_KEY = 'blog_admin_logged_in';
+	const AUTH_KEY = 'blog_admin_logged_in';
 
-    async function checkAuth() {
-      const isLoggedIn = sessionStorage.getItem(AUTH_KEY) === 'true';
-      if (isLoggedIn) {
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('adminDashboard').style.display = 'block';
-        document.getElementById('logoutBtn').style.display = 'inline-block';
-        renderAdminEssays();
-      } else {
-        document.getElementById('loginScreen').style.display = 'block';
-        document.getElementById('adminDashboard').style.display = 'none';
-        document.getElementById('logoutBtn').style.display = 'none';
-      }
-    }
+	/**
+	 * Checks server auth status and switches active screens.
+	 * @returns {Promise<void>}
+	 */
+	async function check_auth() {
+		const is_logged_in = sessionStorage.getItem(AUTH_KEY) === 'true';
+		if (is_logged_in) {
+			document.getElementById('loginScreen').style.display = 'none';
+			document.getElementById('adminDashboard').style.display = 'block';
+			document.getElementById('logoutBtn').style.display = 'inline-block';
+			render_admin_essays();
+		} else {
+			document.getElementById('loginScreen').style.display = 'block';
+			document.getElementById('adminDashboard').style.display = 'none';
+			document.getElementById('logoutBtn').style.display = 'none';
+		}
+	}
 
-    async function handleLogin() {
-      const password = document.getElementById('passwordInput').value;
-      const errorDiv = document.getElementById('loginError');
-      const res = await fetch('/api/login', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({password})
-      });
-      if (res.ok) {
-        sessionStorage.setItem(AUTH_KEY, 'true');
-        errorDiv.style.display = 'none';
-        checkAuth();
-      } else {
-        errorDiv.style.display = 'block';
-      }
-    }
+	/**
+	 * Submits admin login credentials.
+	 * @returns {Promise<void>}
+	 */
+	async function handle_login() {
+		const password = document.getElementById('passwordInput').value;
+		const error_div = document.getElementById('loginError');
+		const res = await fetch('/api/login', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ password })
+		});
+		if (res.ok) {
+			sessionStorage.setItem(AUTH_KEY, 'true');
+			error_div.style.display = 'none';
+			check_auth();
+		} else {
+			error_div.style.display = 'block';
+		}
+	}
 
-    async function logout() {
-      sessionStorage.removeItem(AUTH_KEY); await fetch("/api/logout", {method: "POST"});
-      checkAuth();
-    }
+	/**
+	 * Destroys the admin session.
+	 * @returns {Promise<void>}
+	 */
+	async function logout() {
+		sessionStorage.removeItem(AUTH_KEY);
+		await fetch("/api/logout", { method: "POST" });
+		check_auth();
+	}
 
-    async function renderAdminEssays() {
-      const essays = await getEssays();
-      const listContainer = document.getElementById('adminEssayList');
-      listContainer.innerHTML = '';
+	/**
+	 * Renders the essays inside the admin panel.
+	 * @returns {Promise<void>}
+	 */
+	async function render_admin_essays() {
+		const essays = await get_essays();
+		const list_container = document.getElementById('adminEssayList');
+		list_container.innerHTML = '';
 
-      // Stub card for creation focus
-      listContainer.innerHTML += `
-        <button class="add-stub-card" onclick="focusForm()">
-          + NEUEN GEDANKEN VERFASSEN (FORMULAR FOKUSSIEREN)
-        </button>
-      `;
+		// Stub card for creation focus
+		list_container.innerHTML += `
+			<button class="add-stub-card" onclick="focus_form()">
+				+ NEUEN GEDANKEN VERFASSEN (FORMULAR FOKUSSIEREN)
+			</button>
+		`;
 
-      essays.forEach(essay => {
-        let dateText;
-        if (essay.id === "1") {
-          dateText = "28. Mai 2026";
-        } else if (essay.id === "2") {
-          dateText = "15. April 2026";
-        } else if (essay.id === "3") {
-          dateText = "04. März 2026";
-        } else {
-          const timestamp = parseInt(essay.id);
-          if (!isNaN(timestamp)) {
-            dateText = new Date(timestamp).toLocaleDateString('de-DE', {year: 'numeric', month: 'long', day: 'numeric'});
-          } else {
-            dateText = "Kürzlich veröffentlicht";
-          }
-        }
+		essays.forEach(essay => {
+			let date_text;
+			if (essay.id === 1 || essay.id === "1") {
+				date_text = "28. Mai 2026";
+			} else if (essay.id === 2 || essay.id === "2") {
+				date_text = "15. April 2026";
+			} else if (essay.id === 3 || essay.id === "3") {
+				date_text = "04. März 2026";
+			} else {
+				const timestamp = parseInt(essay.id);
+				if (!isNaN(timestamp)) {
+					date_text = new Date(timestamp).toLocaleDateString('de-DE', {year: 'numeric', month: 'long', day: 'numeric'});
+				} else {
+					date_text = "Kürzlich veröffentlicht";
+				}
+			}
 
-        listContainer.innerHTML += `
-          <div class="admin-essay-item">
-            <div class="item-info">
-              <h4 class="item-title">${essay.title}</h4>
-              <div class="item-meta">
-                <span>${essay.readTime} Lesezeit</span> · 
-                <span>${dateText}</span>
-              </div>
-            </div>
-            <button class="btn-delete" onclick="handleDelete('${essay.id}')">Löschen</button>
-          </div>
-        `;
-      });
-    }
+			list_container.innerHTML += `
+				<div class="admin-essay-item">
+					<div class="item-info">
+						<h4 class="item-title">${essay.title}</h4>
+						<div class="item-meta">
+							<span>${essay.read_time || 0} Min Lesezeit</span> · 
+							<span>${date_text}</span>
+						</div>
+					</div>
+					<button class="btn-delete" onclick="handle_delete('${essay.id}')">Löschen</button>
+				</div>
+			`;
+		});
+	}
 
-    function focusForm() {
-      document.getElementById('essayTitle').focus();
-    }
+	/**
+	 * Focuses the essay title input field.
+	 */
+	function focus_form() {
+		document.getElementById('essayTitle').focus();
+	}
 
-    async function handleCreate(e) {
-      e.preventDefault();
-      
-      const title = document.getElementById('essayTitle').value;
-      const tagsString = document.getElementById('essayTags').value;
-      const readTime = document.getElementById('essayReadTime').value;
-      const content = document.getElementById('essayContent').value;
+	/**
+	 * Event handler for submitting the essay creation form.
+	 * @param {Event} e - The submit event object.
+	 * @returns {Promise<void>}
+	 */
+	async function handle_create(e) {
+		e.preventDefault();
+		
+		const title = document.getElementById('essayTitle').value;
+		const tags_string = document.getElementById('essayTags').value;
+		const read_time_raw = document.getElementById('essayReadTime').value;
+		const content = document.getElementById('essayContent').value;
 
-      const tags = tagsString.split(',').map(t => t.trim()).filter(t => t.length > 0);
+		const tags = tags_string.split(',').map(t => t.trim()).filter(t => t.length > 0);
+		const read_time = parseInt(read_time_raw) || 0;
 
-      const newEssay = {
-        title,
-        tags,
-        readTime,
-        content
-      };
+		const new_essay = {
+			title,
+			tags,
+			read_time,
+			content
+		};
 
-      await addEssay(newEssay);
-      
-      // Reset form
-      document.getElementById('essayForm').reset();
-      
-      // Render
-      renderAdminEssays();
-    }
+		await add_essay(new_essay);
+		
+		// Reset form
+		document.getElementById('essayForm').reset();
+		
+		// Render
+		render_admin_essays();
+	}
 
-    async function handleDelete(id) {
-      if (confirm('Möchten Sie diesen Eintrag wirklich löschen?')) {
-        await deleteEssay(id);
-        renderAdminEssays();
-      }
-    }
+	/**
+	 * Deletes an essay after browser confirmation.
+	 * @param {number|string} id - The essay ID to delete.
+	 * @returns {Promise<void>}
+	 */
+	async function handle_delete(id) {
+		if (confirm('Möchten Sie diesen Eintrag wirklich löschen?')) {
+			await delete_essay(id);
+			render_admin_essays();
+		}
+	}
 
-    // Init
-    document.addEventListener('DOMContentLoaded', () => {
-      checkAuth();
-    });
+	// Initialization
+	document.addEventListener('DOMContentLoaded', () => {
+		check_auth();
+	});
   </script>
 </body>
 </html>
