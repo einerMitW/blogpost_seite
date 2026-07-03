@@ -63,3 +63,24 @@ async function delete_essay(id) {
 		alert("Error deleting essay");
 	}
 }
+
+/**
+ * Formats a SQLite datetime string into a readable German date format.
+ * @param {string} created_at - The SQLite datetime string (YYYY-MM-DD HH:MM:SS).
+ * @returns {string} Formatted date string or fallback.
+ */
+function format_date(created_at) {
+	if (!created_at) return "Kürzlich veröffentlicht";
+	
+	// Convert SQLite space to 'T' and append 'Z' for UTC ISO-8601 parsing
+	const date_str = created_at.replace(' ', 'T') + 'Z';
+	const date_obj = new Date(date_str);
+	if (isNaN(date_obj.getTime())) {
+		return "Kürzlich veröffentlicht";
+	}
+	return date_obj.toLocaleDateString('de-DE', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric'
+	});
+}

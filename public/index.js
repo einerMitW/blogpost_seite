@@ -67,21 +67,7 @@ async function render_essays() {
 		const stagger_class = is_initial_load ? 'reveal-item' : '';
 		const stagger_style = is_initial_load ? `animation-delay: ${(index * 60) + 400}ms;` : '';
 
-		let date_text;
-		if (essay.id === 1 || essay.id === "1") {
-			date_text = "28. Mai 2026";
-		} else if (essay.id === 2 || essay.id === "2") {
-			date_text = "15. April 2026";
-		} else if (essay.id === 3 || essay.id === "3") {
-			date_text = "04. März 2026";
-		} else {
-			const timestamp = parseInt(essay.id);
-			if (!isNaN(timestamp)) {
-				date_text = new Date(timestamp).toLocaleDateString('de-DE', {year: 'numeric', month: 'long', day: 'numeric'});
-			} else {
-				date_text = "Kürzlich veröffentlicht";
-			}
-		}
+		const date_text = format_date(essay.created_at);
 
 		list.innerHTML += `
 			<a class="essay-card ${stagger_class}" style="${stagger_style} view-transition-name: card-${essay.id};" href="read.html?id=${essay.id}" data-od-id="card-${essay.id}">

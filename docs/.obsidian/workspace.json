@@ -11,10 +11,14 @@
             "id": "c5e2b033e6e658b2",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph-Ansicht"
+              "type": "markdown",
+              "state": {
+                "file": "tests-db.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "tests-db"
             }
           }
         ]
@@ -91,6 +95,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "tests-db.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -100,7 +105,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Rückverweise"
+              "title": "Rückverweise auf tests-db"
             }
           },
           {
@@ -109,11 +114,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "tests-db.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Ausgehende Links"
+              "title": "Ausgehende Links von tests-db öffnen"
             }
           },
           {
@@ -151,12 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "tests-db.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Gliederung"
+              "title": "Gliederung von tests-db"
             }
           }
         ]

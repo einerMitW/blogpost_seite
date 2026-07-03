@@ -71,21 +71,7 @@ async function render_admin_essays() {
 	`;
 
 	essays.forEach(essay => {
-		let date_text;
-		if (essay.id === 1 || essay.id === "1") {
-			date_text = "28. Mai 2026";
-		} else if (essay.id === 2 || essay.id === "2") {
-			date_text = "15. April 2026";
-		} else if (essay.id === 3 || essay.id === "3") {
-			date_text = "04. März 2026";
-		} else {
-			const timestamp = parseInt(essay.id);
-			if (!isNaN(timestamp)) {
-				date_text = new Date(timestamp).toLocaleDateString('de-DE', {year: 'numeric', month: 'long', day: 'numeric'});
-			} else {
-				date_text = "Kürzlich veröffentlicht";
-			}
-		}
+		const date_text = format_date(essay.created_at);
 
 		list_container.innerHTML += `
 			<div class="admin-essay-item">
