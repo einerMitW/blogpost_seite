@@ -19,7 +19,7 @@ The database schema consists of a single table named `essays`. The schema is ini
 | `content` | TEXT | NOT NULL | Markdown body of the essay. |
 | `tags` | TEXT | - | Comma-separated list of tags associated with the essay. |
 | `read_time` | INTEGER | - | Approximate read time in minutes. |
-| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Date and time when the essay was created. |
+| `created_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | Date and time when the essay was created. Stored in UTC. |
 
 All read/write operations (e.g. [[docs/api-essays-get.md]], [[docs/api-essays-post.md]]) run against this table structure.
 
@@ -27,6 +27,7 @@ All read/write operations (e.g. [[docs/api-essays-get.md]], [[docs/api-essays-po
 To provide default essays upon first setup:
 - A startup query checks the row count of `essays`.
 - If the count is `0`, a transaction seeds the database with the three default essays from the project specifications (e.g. "Warum Schreiben eine Superkraft...", "Architektur-Entscheidungen...", "KISS...").
+- Seeding explicitly defines the historical publication date string (e.g. `'2026-05-28 14:00:00'`) in the `created_at` column, ensuring correct chronological order and parsing.
 
 ## Related pages
 - [[docs/db-connection.md]]
