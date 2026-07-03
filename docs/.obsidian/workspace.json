@@ -179,6 +179,9 @@
   },
   "active": "c5e2b033e6e658b2",
   "lastOpenFiles": [
+    "tests-user-flow.md",
+    "tests-server.md",
+    "tests-db.md",
     "fe-animations.md",
     "fe-admin-layout.md",
     "docs/fe-admin-logic.md",

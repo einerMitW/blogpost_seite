@@ -12,7 +12,7 @@ Welcome to the Gedankengang developers' documentation. Below is the structured i
 
 ### I. Database Layer
 - [[docs/db-connection.md]] — Establishes the SQLite connection using `better-sqlite3`.
-- [[docs/db-schema.md]] — Structure and details of the database tables (e.g. `essays` table).
+- [[docs/db-schema.md]] — Structure and details of the database tables (e.g. `essays` table) and initialization seeds.
 
 ### II. Backend Application
 - [[docs/server-init.md]] — Server configuration, parsing, static directories, and port binding.
@@ -35,3 +35,8 @@ Welcome to the Gedankengang developers' documentation. Below is the structured i
 - [[docs/fe-admin-logic.md]] — Login flows, session verification, and article form handler functions.
 - [[docs/fe-read-layout.md]] — Structure of the distraction-free reading mode.
 - [[docs/fe-read-rendering.md]] — Loading individual articles and rendering markdown via `marked.js`.
+
+### V. Test Suite & Verification Contracts
+- [[docs/tests-db.md]] — Unit tests for SQLite table creation and CRUD operations.
+- [[docs/tests-server.md]] — Integration tests for server initialization and REST auth endpoints.
+- [[docs/tests-user-flow.md]] — Contract tests checking HTML purity (no inline script/event attributes) and routing.

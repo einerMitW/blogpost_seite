@@ -2,28 +2,29 @@
 
 **Summary**: Documents the client-side JavaScript logic responsible for displaying and filtering essays on the overview page.
 
-**Sources**: [[public/index.html]]
+**Sources**: [[public/index.js]]
 
 **Last updated**: 2026-07-03
 
 ---
 
-The overview page contains inline script logic to fetch and display the essays.
+The overview page contains external logic located in `index.js` to render tags and articles dynamically.
 
-### Initial Load
-When the DOM is ready, the script:
-1. Instantiates `activeTag` state (retrieved from `tag` URL search parameters if present, defaulting to `'all'`).
-2. Calls `fetchEssays()`, which queries the list endpoint via `getEssays()` ([[docs/fe-api-client.md]]).
-3. Triggers rendering pipelines: `renderTags()` and `renderEssays()`.
+### Initial Lifecycle
+Upon DOM readiness:
+1. Parses URL queries using `URLSearchParams` to extract the active tag filter (defaults to `'all'`).
+2. Triggers asynchronous pipelines `render_tags()` and `render_essays()` using `get_essays()` and `get_all_tags()` ([[docs/fe-api-client.md]]).
 
-### Tag Rendering & Filtering
-- `renderTags()`: Dynamically inserts button elements into `#tagList`. Each button displays a tag name and the number of essays referencing it. Clicking triggers `filterByTag(tag)`.
-- `renderEssays()`: Iterates through the list of essays, filters them based on `activeTag`, and appends formatted anchor templates (`.essay-card`) to `#essayList`. Text content is truncated to 220 characters to act as a preview.
+### Programmatic Event Listeners
+To comply with modular specifications, no event handlers are declared inside HTML attributes. Instead:
+- **Category Filter clicks**: Dynamically bound via event delegation. The script listens on the parent `#tagList` element, matches clicks to `.tag-btn` elements using `event.target.closest()`, and calls `filter_by_tag(tag)`.
+- **Card Tag clicks**: Dynamically bound via delegation on `#essayList`. Clicking a tag within an article card prevents parent navigation and filters the overview list.
 
 ### View Transitions
-The function `filterByTag(tag)` updates the global `activeTag` state and renders the views. If supported by the browser, it wraps the update inside `document.startViewTransition()` to execute smooth cross-fades.
+The function `filter_by_tag(tag)` updates the global state `active_tag` and refreshes the layout. It utilizes `document.startViewTransition()` to enable seamless cross-fades if supported by the client browser.
 
 ## Related pages
 - [[docs/fe-overview-layout.md]]
 - [[docs/fe-api-client.md]]
 - [[docs/fe-animations.md]]
+- [[docs/tests-user-flow.md]]
