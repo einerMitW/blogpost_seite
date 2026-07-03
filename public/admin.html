@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wireframe - Variante A1: Editorial (Admin)</title>
+  <style>
+    :root {
+      /* Edles, philosophisches und kreatives Farbsystem übertragen von B1 */
+      --bg: oklch(96.5% 0.003 70);       /* Alabaster / Feiner warmer Steinton */
+      --surface: oklch(100% 0 0);        /* Reines Weiß für maximalen Kontrast */
+      --fg: oklch(22% 0.01 70);          /* Tiefes Schiefer-Schwarz (organisch) */
+      --muted: oklch(52% 0.008 70);      /* Gedämpftes Grau */
+      --border: oklch(86% 0.006 70);     /* Filigrane, zarte Linien */
+      --accent: oklch(45% 0.13 260);     /* Deep Sapphire Blue */
+      --accent-soft: oklch(94% 0.015 260);
+      --creative: oklch(62% 0.13 75);    /* Gold/Ocker */
+      --creative-soft: oklch(95% 0.01 75);
+      --danger: oklch(55% 0.18 20);       /* Rotes Signal für Löschung */
+      
+      --font-display: 'Iowan Old Style', Georgia, serif;
+      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+      
+      --radius: 2px;
+      --radius-lg: 4px;
+      
+      --shadow: 0 10px 30px -10px rgba(28, 25, 23, 0.07), 0 1px 3px rgba(28, 25, 23, 0.02);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    /* Fokus-Indikator für Barrierefreiheit */
+    *:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wireframe-badge {
+      background: var(--fg);
+      color: var(--surface);
+      padding: 8px 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .wireframe-badge a {
+      color: var(--creative);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s ease;
+    }
+    .wireframe-badge a:hover {
+      border-color: var(--creative);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: normal;
+      font-style: italic;
+      letter-spacing: -0.02em;
+    }
+    .logo-admin {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      margin-left: 8px;
+      text-transform: uppercase;
+      font-weight: normal;
+      letter-spacing: 0.08em;
+      border-radius: var(--radius);
+    }
+
+    .btn-top {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .btn-top:hover {
+      border-color: var(--fg);
+      color: var(--fg);
+      background: var(--bg);
+    }
+
+    .btn-logout-header {
+      border-color: var(--danger);
+      color: var(--danger);
+      margin-left: 10px;
+    }
+    .btn-logout-header:hover {
+      background: var(--danger);
+      color: white;
+      border-color: var(--danger);
+    }
+
+    /* Login Area */
+    .login-box {
+      width: 100%;
+      max-width: 400px;
+      margin: 100px auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      padding: 40px;
+      box-shadow: var(--shadow);
+    }
+    .login-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: normal;
+      margin: 0 0 24px;
+      text-align: center;
+      color: var(--fg);
+      letter-spacing: -0.015em;
+    }
+    .form-group {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+    .input-field {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      outline: none;
+      background: var(--bg);
+      transition: all 0.15s ease;
+    }
+    .input-field:focus {
+      border-color: var(--fg);
+      background: var(--surface);
+    }
+
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 12px 18px;
+      border: 1px solid var(--fg);
+      border-radius: var(--radius);
+      background: var(--fg);
+      color: var(--surface);
+      cursor: pointer;
+      text-transform: uppercase;
+      text-align: center;
+      transition: all 0.15s ease;
+      letter-spacing: 0.08em;
+      width: 100%;
+      display: block;
+    }
+    .btn:hover {
+      background: var(--creative);
+      border-color: var(--creative);
+    }
+
+    /* Admin Dashboard Area */
+    .admin-dashboard {
+      display: none; /* JS-gesteuert */
+      padding: 40px 0 80px;
+    }
+
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 40px;
+    }
+    @media (max-width: 900px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-title {
+      font-size: 18px;
+      font-weight: normal;
+      margin: 0 0 16px;
+      font-family: var(--font-display);
+      border-bottom: 1.5px solid var(--fg);
+      padding-bottom: 8px;
+      letter-spacing: -0.015em;
+    }
+
+    .admin-form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      box-shadow: var(--shadow);
+    }
+    .textarea-field {
+      width: 100%;
+      height: 200px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      resize: vertical;
+      outline: none;
+      background: var(--bg);
+      transition: all 0.15s ease;
+    }
+    .textarea-field:focus {
+      border-color: var(--fg);
+      background: var(--surface);
+    }
+
+    /* List Column Styles */
+    .admin-essay-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .add-stub-card {
+      border: 1.5px dashed var(--border);
+      background: transparent;
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      cursor: pointer;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      width: 100%;
+      display: block;
+      transition: all 0.15s ease;
+    }
+    .add-stub-card:hover {
+      border-color: var(--fg);
+      color: var(--fg);
+      background: var(--surface);
+    }
+
+    .admin-essay-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow);
+    }
+    .item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .item-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: normal;
+      margin: 0;
+      color: var(--fg);
+    }
+    .item-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .btn-delete {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--danger);
+      background: transparent;
+      border: 1px dashed var(--danger);
+      padding: 6px 10px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .btn-delete:hover {
+      background: var(--danger);
+      color: white;
+      border-style: solid;
+    }
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: 80px;
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-badge">
+    <span>Gedankengang Admin-Konsole</span>
+    <span><a href="index.html">← Zur Varianten-Übersicht</a></span>
+  </div>
+
+  <header class="header" data-od-id="header">
+    <div class="container header-inner">
+      <div class="logo">Gedankengang <span class="logo-admin">Admin</span></div>
+      <div>
+        <a href="index.html" class="btn-top">Vorschau-Modus</a>
+        <button id="logoutBtn" class="btn-top btn-logout-header" onclick="logout()" style="display:none;">Abmelden</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Screen 1: Login Form -->
+    <section id="loginScreen" class="login-box" data-od-id="login-box">
+      <h2 class="login-title">Admin-Anmeldung</h2>
+      <div class="form-group">
+        <label for="passwordInput">Passwort-Key</label>
+        <input type="password" id="passwordInput" class="input-field" placeholder="Bitte Admin-Passwort eingeben" onkeydown="if(event.key === 'Enter') handleLogin()" />
+        <div id="loginError" style="display:none; color: var(--danger); font-family: var(--font-mono); font-size: 11.5px; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500;">Falsches Passwort! Bitte nutzen Sie "admin".</div>
+      </div>
+      <button class="btn" onclick="handleLogin()">Freigeben</button>
+      <div style="font-family: var(--font-mono); font-size: 11px; text-align: center; color: var(--muted); margin-top: 16px;">
+        Passwort für Vorschau: <code>admin</code>
+      </div>
+    </section>
+
+    <!-- Screen 2: Dashboard -->
+    <section id="adminDashboard" class="admin-dashboard">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 32px; border-bottom: 1px solid var(--border); padding-bottom: 16px;">
+        <div>
+          <h1 class="h1" style="font-family: var(--font-display); font-size: 28px; font-weight: normal; margin: 0; letter-spacing: -0.015em;">Redaktionsbereich</h1>
+          <p class="subtitle">Einträge verwalten, löschen oder neue Gedanken formulieren.</p>
+        </div>
+      </div>
+
+      <div class="admin-layout">
+        <!-- Col 1: Form -->
+        <div data-od-id="form-column">
+          <h3 class="panel-title">Gedanke verfassen</h3>
+          <form class="admin-form" id="essayForm" onsubmit="handleCreate(event)">
+            <div class="form-group">
+              <label for="essayTitle">Essay-Titel</label>
+              <input type="text" id="essayTitle" class="input-field" required placeholder="z.B. Die Poesie des Minimalismus" />
+            </div>
+            <div class="form-group">
+              <label for="essayTags">Themen-Tags (Komma-getrennt)</label>
+              <input type="text" id="essayTags" class="input-field" required placeholder="z.B. Philosophie, Geist, Ästhetik" />
+            </div>
+            <div class="form-group">
+              <label for="essayReadTime">Lesezeit-Attribut</label>
+              <input type="text" id="essayReadTime" class="input-field" required placeholder="z.B. 5 Min" />
+            </div>
+            <div class="form-group">
+              <label for="essayContent">Inhalt (Markdown / Text)</label>
+              <textarea id="essayContent" class="textarea-field" required placeholder="Schreiben Sie hier Ihre Gedanken nieder..."></textarea>
+            </div>
+            <button type="submit" class="btn">Gedanke veröffentlichen</button>
+          </form>
+        </div>
+
+        <!-- Col 2: List -->
+        <div data-od-id="list-column">
+          <h3 class="panel-title">Veröffentlichte Essays</h3>
+          
+          <div class="admin-essay-list" id="adminEssayList">
+            <!-- Dynamisch geladen -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>© Gedankengang Wireframe A1</span>
+      <span>Redaktionsbereich</span>
+    </footer>
+  </main>
+
+  <script src="api.js"></script>
+  <script>
+    const AUTH_KEY = 'blog_admin_logged_in';
+
+    async function checkAuth() {
+      const isLoggedIn = sessionStorage.getItem(AUTH_KEY) === 'true';
+      if (isLoggedIn) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminDashboard').style.display = 'block';
+        document.getElementById('logoutBtn').style.display = 'inline-block';
+        renderAdminEssays();
+      } else {
+        document.getElementById('loginScreen').style.display = 'block';
+        document.getElementById('adminDashboard').style.display = 'none';
+        document.getElementById('logoutBtn').style.display = 'none';
+      }
+    }
+
+    async function handleLogin() {
+      const password = document.getElementById('passwordInput').value;
+      const errorDiv = document.getElementById('loginError');
+      const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({password})
+      });
+      if (res.ok) {
+        sessionStorage.setItem(AUTH_KEY, 'true');
+        errorDiv.style.display = 'none';
+        checkAuth();
+      } else {
+        errorDiv.style.display = 'block';
+      }
+    }
+
+    async function logout() {
+      sessionStorage.removeItem(AUTH_KEY); await fetch("/api/logout", {method: "POST"});
+      checkAuth();
+    }
+
+    async function renderAdminEssays() {
+      const essays = await getEssays();
+      const listContainer = document.getElementById('adminEssayList');
+      listContainer.innerHTML = '';
+
+      // Stub card for creation focus
+      listContainer.innerHTML += `
+        <button class="add-stub-card" onclick="focusForm()">
+          + NEUEN GEDANKEN VERFASSEN (FORMULAR FOKUSSIEREN)
+        </button>
+      `;
+
+      essays.forEach(essay => {
+        let dateText;
+        if (essay.id === "1") {
+          dateText = "28. Mai 2026";
+        } else if (essay.id === "2") {
+          dateText = "15. April 2026";
+        } else if (essay.id === "3") {
+          dateText = "04. März 2026";
+        } else {
+          const timestamp = parseInt(essay.id);
+          if (!isNaN(timestamp)) {
+            dateText = new Date(timestamp).toLocaleDateString('de-DE', {year: 'numeric', month: 'long', day: 'numeric'});
+          } else {
+            dateText = "Kürzlich veröffentlicht";
+          }
+        }
+
+        listContainer.innerHTML += `
+          <div class="admin-essay-item">
+            <div class="item-info">
+              <h4 class="item-title">${essay.title}</h4>
+              <div class="item-meta">
+                <span>${essay.readTime} Lesezeit</span> · 
+                <span>${dateText}</span>
+              </div>
+            </div>
+            <button class="btn-delete" onclick="handleDelete('${essay.id}')">Löschen</button>
+          </div>
+        `;
+      });
+    }
+
+    function focusForm() {
+      document.getElementById('essayTitle').focus();
+    }
+
+    async function handleCreate(e) {
+      e.preventDefault();
+      
+      const title = document.getElementById('essayTitle').value;
+      const tagsString = document.getElementById('essayTags').value;
+      const readTime = document.getElementById('essayReadTime').value;
+      const content = document.getElementById('essayContent').value;
+
+      const tags = tagsString.split(',').map(t => t.trim()).filter(t => t.length > 0);
+
+      const newEssay = {
+        title,
+        tags,
+        readTime,
+        content
+      };
+
+      await addEssay(newEssay);
+      
+      // Reset form
+      document.getElementById('essayForm').reset();
+      
+      // Render
+      renderAdminEssays();
+    }
+
+    async function handleDelete(id) {
+      if (confirm('Möchten Sie diesen Eintrag wirklich löschen?')) {
+        await deleteEssay(id);
+        renderAdminEssays();
+      }
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+    });
+  </script>
+</body>
+</html>

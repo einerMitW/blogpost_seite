@@ -393,7 +393,7 @@
         Gedankengang <span class="logo-sub">Journal</span>
       </div>
       <div>
-        <a href="admin.html" class="btn-login">Admin Login</a>
+        <a href="variant-a1-admin.html" class="btn-login">Admin Login</a>
       </div>
     </div>
   </header>
@@ -436,14 +436,77 @@
     </div>
   </footer>
 
-  <script src="api.js"></script>
+  <script>
+const DEFAULT_ESSAYS = [
+  {
+    id: "1",
+    title: "Warum Schreiben eine Superkraft für Entwickler ist",
+    tags: ["Technik", "Schreiben", "Karriere"],
+    readTime: "6 Min",
+    content: "Schreiben ist weit mehr als nur das Festhalten von Wörtern auf Papier oder einem Bildschirm. Für Softwareentwickler ist es ein fundamentales Denkwerkzeug. Wenn wir Code schreiben, lösen wir komplexe logische Probleme. Wenn wir jedoch über diesen Code oder die zugrundeliegenden Konzepte schreiben, zwingen wir unser Gehirn, die Annahmen zu hinterfragen und die Struktur unserer Gedanken zu ordnen. Ein gut geschriebener Essay dokumentiert nicht nur Wissen, sondern zeigt auch die Fähigkeit zur präzisen Kommunikation. Entwickler, die regelmäßig schreiben, können komplexe technische Sachverhalte einfacher erklären, was sie in Teams und bei der Zusammenarbeit mit Stakeholdern unersetzlich macht. Es ist ein Akt des 'Skin in the Game' – man stellt seine Ideen zur Schau und setzt sich dem Feedback der Leser aus, was das eigene Wachstum beschleunigt."
+  },
+  {
+    id: "2",
+    title: "Architektur-Entscheidungen sauber dokumentieren",
+    tags: ["Software-Architektur", "Dokumentation"],
+    readTime: "8 Min",
+    content: "In der Softwareentwicklung treffen wir täglich Dutzende von Entscheidungen. Warum haben wir uns für diese Datenbank entschieden? Warum nutzen wir dieses Microservice-Muster statt eines Monolithen? Monate später weiß das oft niemand mehr. Hier helfen Architecture Decision Records (ADRs). Ein ADR ist ein kurzes Textdokument, das eine Architekturentscheidung, ihren Kontext und ihre Konsequenzen beschreibt. Indem wir diese Entscheidungen schriftlich festhalten, schaffen wir ein historisches Protokoll für zukünftige Entwickler. Es verhindert langwierige Diskussionen über bereits gelöste Probleme und macht das Onboarding neuer Teammitglieder erheblich effizienter. Ein guter ADR sollte kurz sein, die Alternativen aufzeigen und die getroffene Wahl rational begründen."
+  },
+  {
+    id: "3",
+    title: "KISS: Keep It Simple, Stupid - in der Praxis",
+    tags: ["Programmierung", "Clean Code"],
+    readTime: "5 Min",
+    content: "Das KISS-Prinzip ist eines der bekanntesten Konzepte der Softwareentwicklung und doch eines der am schwersten umzusetzenden. Entwickler neigen dazu, Probleme vorauszusehen, die es noch gar nicht gibt. Wir bauen komplexe Abstraktionsschichten, Vererbungshierarchien und konfigurierbare Fabriken für Szenarien, die niemals eintreffen werden. Einfachheit erfordert Disziplin. Es bedeutet, die einfachste Lösung zu wählen, die das aktuelle Problem löst, ohne die Zukunft unnötig zu verbauen. Einfacher Code ist leichter zu lesen, leichter to testen und wesentlich wartungsärmer. Wenn du das nächste Mal versucht bist, eine generische Lösung für ein spezifisches Problem zu entwerfen, frage dich: Geht das auch einfacher?"
+  }
+];
+
+function getEssays() {
+  const stored = localStorage.getItem("blog_essays");
+  if (!stored) {
+    localStorage.setItem("blog_essays", JSON.stringify(DEFAULT_ESSAYS));
+    return DEFAULT_ESSAYS;
+  }
+  return JSON.parse(stored);
+}
+
+function saveEssays(essays) {
+  localStorage.setItem("blog_essays", JSON.stringify(essays));
+}
+
+function addEssay(essay) {
+  const essays = getEssays();
+  essay.id = Date.now().toString();
+  essays.push(essay);
+  saveEssays(essays);
+  return essay;
+}
+
+function deleteEssay(id) {
+  let essays = getEssays();
+  essays = essays.filter(e => e.id !== id);
+  saveEssays(essays);
+}
+
+function getAllTags() {
+  const essays = getEssays();
+  const tags = new Set();
+  essays.forEach(e => {
+    if (Array.isArray(e.tags)) {
+      e.tags.forEach(t => tags.add(t));
+    }
+  });
+  return Array.from(tags);
+}
+
+</script>
   <script>
     let activeTag = 'all';
     let isInitialLoad = true;
 
-    async function renderTags() {
-      const essays = await getEssays();
-      const tags = await getAllTags();
+    function renderTags() {
+      const essays = getEssays();
+      const tags = getAllTags();
       const tagList = document.getElementById('tagList');
       
       document.getElementById('allCount').innerText = essays.length;
@@ -466,8 +529,8 @@
       });
     }
 
-    async function renderEssays() {
-      const essays = await getEssays();
+    function renderEssays() {
+      const essays = getEssays();
       const list = document.getElementById('essayList');
       list.innerHTML = '';
 
@@ -513,7 +576,7 @@
         }
 
         list.innerHTML += `
-          <a class="essay-card ${staggerClass}" style="${staggerStyle} view-transition-name: card-${essay.id};" href="read.html?id=${essay.id}" data-od-id="card-${essay.id}">
+          <a class="essay-card ${staggerClass}" style="${staggerStyle} view-transition-name: card-${essay.id};" href="variant-a1-read.html?id=${essay.id}" data-od-id="card-${essay.id}">
             <div class="card-top">
               <span class="card-readtime">${essay.readTime} Lesezeit</span>
               <time class="card-date">${dateText}</time>
