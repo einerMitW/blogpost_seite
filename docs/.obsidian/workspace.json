@@ -178,6 +178,23 @@
   },
   "active": "c5e2b033e6e658b2",
   "lastOpenFiles": [
-    "fe-api-client.md"
+    "server-init.md",
+    "fe-read-rendering.md",
+    "fe-read-layout.md",
+    "fe-overview-rendering.md",
+    "fe-overview-layout.md",
+    "fe-design-tokens.md",
+    "fe-api-client.md",
+    "fe-animations.md",
+    "fe-admin-logic.md",
+    "fe-admin-layout.md",
+    "db-schema.md",
+    "db-connection.md",
+    "auth-middleware.md",
+    "auth-login.md",
+    "api-essays-post.md",
+    "api-essays-get.md",
+    "api-essays-get-single.md",
+    "api-essays-delete.md"
   ]
 }
