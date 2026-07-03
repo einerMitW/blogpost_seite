@@ -372,10 +372,10 @@
       <h2 class="login-title">Admin-Anmeldung</h2>
       <div class="form-group">
         <label for="passwordInput">Passwort-Key</label>
-        <input type="password" id="passwordInput" class="input-field" placeholder="Bitte Admin-Passwort eingeben" onkeydown="if(event.key === 'Enter') handleLogin()" />
+        <input type="password" id="passwordInput" class="input-field" placeholder="Bitte Admin-Passwort eingeben" onkeydown="if(event.key === 'Enter') handle_login()" />
         <div id="loginError" style="display:none; color: var(--danger); font-family: var(--font-mono); font-size: 11.5px; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500;">Falsches Passwort! Bitte nutzen Sie "admin".</div>
       </div>
-      <button class="btn" onclick="handleLogin()">Freigeben</button>
+      <button class="btn" onclick="handle_login()">Freigeben</button>
       <div style="font-family: var(--font-mono); font-size: 11px; text-align: center; color: var(--muted); margin-top: 16px;">
         Passwort für Vorschau: <code>admin</code>
       </div>
@@ -394,7 +394,7 @@
         <!-- Col 1: Form -->
         <div data-od-id="form-column">
           <h3 class="panel-title">Gedanke verfassen</h3>
-          <form class="admin-form" id="essayForm" onsubmit="handleCreate(event)">
+          <form class="admin-form" id="essayForm" onsubmit="handle_create(event)">
             <div class="form-group">
               <label for="essayTitle">Essay-Titel</label>
               <input type="text" id="essayTitle" class="input-field" required placeholder="z.B. Die Poesie des Minimalismus" />
