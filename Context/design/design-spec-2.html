@@ -1,0 +1,541 @@
+
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Design System & Spezifikation - Gedankengang (Variante A1)</title>
+  <style>
+    :root {
+      /* Edles, philosophisches und kreatives Farbsystem (Alabaster Editorial) */
+      --bg: oklch(96.5% 0.003 70);
+      --surface: oklch(100% 0 0);
+      --fg: oklch(22% 0.01 70);
+      --muted: oklch(52% 0.008 70);
+      --border: oklch(86% 0.006 70);
+      --accent: oklch(45% 0.13 260);
+      --accent-soft: oklch(94% 0.015 260);
+      --creative: oklch(62% 0.13 75);
+      --creative-soft: oklch(95% 0.01 75);
+      --meta: oklch(62% 0.13 75);
+      
+      --font-display: 'Iowan Old Style', Georgia, serif;
+      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+      
+      --radius: 2px;
+      --radius-lg: 4px;
+      
+      --shadow: 0 10px 30px -10px rgba(28, 25, 23, 0.07), 0 1px 3px rgba(28, 25, 23, 0.02);
+      --shadow-hover: 0 16px 40px -12px rgba(28, 25, 23, 0.12), 0 2px 8px rgba(28, 25, 23, 0.04);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    
+    *:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Layout */
+    .app-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: normal;
+      letter-spacing: -0.02em;
+    }
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      border-left: 1px solid var(--border);
+      padding-left: 12px;
+    }
+
+    .main-layout {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 48px;
+      padding: 48px 24px;
+    }
+    @media (max-width: 900px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+    }
+
+    /* Navigation Sidebar */
+    .nav-sidebar {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+    .nav-sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .nav-sidebar a {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 8px 12px;
+      border-left: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .nav-sidebar a:hover, .nav-sidebar li.active a {
+      color: var(--fg);
+      border-left-color: var(--accent);
+      background: var(--surface);
+    }
+
+    /* Content Pane */
+    .content-pane {
+      display: flex;
+      flex-direction: column;
+      gap: 64px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: normal;
+      margin: 0 0 24px;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 12px;
+      letter-spacing: -0.015em;
+    }
+    
+    .section-desc {
+      font-size: 15px;
+      color: var(--muted);
+      margin-top: -12px;
+      margin-bottom: 24px;
+      line-height: 1.5;
+      max-width: 600px;
+    }
+
+    .grid-colors {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 24px;
+    }
+    .color-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: var(--shadow);
+    }
+    .color-swatch {
+      height: 80px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .color-name {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: bold;
+    }
+    .color-value {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* Typo styles */
+    .typo-spec {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .typo-row {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 16px;
+      align-items: baseline;
+    }
+    @media (max-width: 600px) {
+      .typo-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+    .typo-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    
+    .font-display { font-family: var(--font-display); font-size: 32px; letter-spacing: -0.015em; margin: 0; font-weight: normal; }
+    .font-body { font-family: var(--font-body); font-size: 16px; margin: 0; line-height: 1.6; }
+    .font-mono { font-family: var(--font-mono); font-size: 13px; margin: 0; }
+
+    /* Live Component Preview */
+    .preview-box {
+      background: var(--bg);
+      border: 1px dashed var(--border);
+      padding: 32px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+    .preview-box-inner {
+      width: 100%;
+      max-width: 460px;
+    }
+
+    /* Replica of the Essay Card */
+    .replica-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    .replica-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--fg);
+    }
+    .replica-card-top {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .replica-card-title {
+      font-family: var(--font-display);
+      font-size: 21px;
+      margin: 0;
+      line-height: 1.35;
+      letter-spacing: -0.015em;
+    }
+    .replica-card:hover .replica-card-title {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    .replica-card-preview {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.6;
+    }
+    .replica-card-bottom {
+      border-top: 1px dashed var(--border);
+      padding-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .replica-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: color 0.15s ease;
+    }
+    .replica-tag:hover {
+      color: var(--accent);
+    }
+
+    /* Buttons spec */
+    .button-showcase {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .btn-show {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 10px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--fg);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .btn-show:hover {
+      border-color: var(--fg);
+      background: var(--bg);
+    }
+    .btn-show.primary {
+      background: var(--fg);
+      color: var(--surface);
+      border-color: var(--fg);
+    }
+    .btn-show.primary:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--surface);
+    }
+
+    /* Form spec */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      max-width: 300px;
+    }
+    .form-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg);
+    }
+    .form-input {
+      font-family: var(--font-body);
+      font-size: 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--fg);
+      transition: border-color 0.15s ease;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo-container">
+        <span class="brand-title">Gedankengang</span>
+        <span class="brand-sub">Design Spezifikation (Variante A1)</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    
+    <nav class="nav-sidebar">
+      <ul>
+        <li class="active"><a href="#colors">Farbsystem</a></li>
+        <li><a href="#typography">Typografie</a></li>
+        <li><a href="#components">Komponenten</a></li>
+      </ul>
+    </nav>
+
+    <main class="content-pane">
+      
+      <section id="colors">
+        <h2 class="section-title">Farbsystem</h2>
+        <p class="section-desc">Die Farbpalette basiert exklusiv auf der Variante A1 (Alabaster Editorial). Das Farbsystem wurde entwickelt, um Kreativität und Philosophie mit edler Typografie zu vereinen. Es verwendet präzise OKLch-Farbwerte.</p>
+        
+        <div class="grid-colors">
+          <div class="color-card">
+            <div class="color-swatch" style="background: var(--bg)"></div>
+            <div class="color-details">
+              <div class="color-name">Background</div>
+              <div class="color-value">oklch(96.5% 0.003 70)</div>
+            </div>
+          </div>
+          <div class="color-card">
+            <div class="color-swatch" style="background: var(--surface)"></div>
+            <div class="color-details">
+              <div class="color-name">Surface</div>
+              <div class="color-value">oklch(100% 0 0)</div>
+            </div>
+          </div>
+          <div class="color-card">
+            <div class="color-swatch" style="background: var(--fg)"></div>
+            <div class="color-details">
+              <div class="color-name">Foreground</div>
+              <div class="color-value">oklch(22% 0.01 70)</div>
+            </div>
+          </div>
+          <div class="color-card">
+            <div class="color-swatch" style="background: var(--muted)"></div>
+            <div class="color-details">
+              <div class="color-name">Muted</div>
+              <div class="color-value">oklch(52% 0.008 70)</div>
+            </div>
+          </div>
+          <div class="color-card">
+            <div class="color-swatch" style="background: var(--border)"></div>
+            <div class="color-details">
+              <div class="color-name">Border</div>
+              <div class="color-value">oklch(86% 0.006 70)</div>
+            </div>
+          </div>
+          <div class="color-card">
+            <div class="color-swatch" style="background: var(--accent)"></div>
+            <div class="color-details">
+              <div class="color-name">Accent (Sapphire)</div>
+              <div class="color-value">oklch(45% 0.13 260)</div>
+            </div>
+          </div>
+          <div class="color-card">
+            <div class="color-swatch" style="background: var(--creative)"></div>
+            <div class="color-details">
+              <div class="color-name">Creative (Gold)</div>
+              <div class="color-value">oklch(62% 0.13 75)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="typography">
+        <h2 class="section-title">Typografie</h2>
+        <p class="section-desc">Die typografische Hierarchie trennt lesbaren Inhalt (Serifen) von strukturellen Elementen und System-Status (Sans-Serif/Monospace).</p>
+
+        <div class="typo-spec">
+          <div class="typo-row">
+            <div class="typo-label">Display<br/>(Iowan Old Style)</div>
+            <div>
+              <p class="font-display">Gedankengang</p>
+              <p style="font-family: var(--font-body); font-size: 13px; color: var(--muted); margin-top: 4px;">Eingesetzt für H1, H2 und Kacheltitel. Negatives Letter-Spacing (-0.015em).</p>
+            </div>
+          </div>
+          <div class="typo-row">
+            <div class="typo-label">Body<br/>(System Sans)</div>
+            <div>
+              <p class="font-body">Das Layout verzichtet auf unnötige Verzierungen und konzentriert sich auf das Wesentliche: den Text und die Leseerfahrung.</p>
+              <p style="font-family: var(--font-body); font-size: 13px; color: var(--muted); margin-top: 4px;">Fließtext und Basis-Inhalt. Line-Height 1.6.</p>
+            </div>
+          </div>
+          <div class="typo-row">
+            <div class="typo-label">Monospace<br/>(SF Mono/Menlo)</div>
+            <div>
+              <p class="font-mono">DATUM &bull; METADATEN &bull; LABELS</p>
+              <p style="font-family: var(--font-body); font-size: 13px; color: var(--muted); margin-top: 4px;">Kleine Labels, Tags und Eyebrows. Uppercase mit 0.08em Laufweite.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="components">
+        <h2 class="section-title">Komponenten</h2>
+        <p class="section-desc">Die zentralen Bausteine der Variante A1 mit ihren Zuständen und Abständen.</p>
+
+        <h4 style="font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 16px;">1. Essay Kachel (Hover & Fokus)</h4>
+        <div class="preview-box">
+          <div class="preview-box-inner">
+            <a href="#" class="replica-card" role="button">
+              <div class="replica-card-top">
+                <span>03. Juli 2026</span>
+                <span>8 MIN LESEZEIT</span>
+              </div>
+              <h3 class="replica-card-title">Ästhetik im Digitalen Raum</h3>
+              <p class="replica-card-preview">Ein Essay über den Unterschied zwischen Dekoration und Funktion im Interface Design.</p>
+              <div class="replica-card-bottom">
+                <span class="replica-tag">/ Design</span>
+                <span class="replica-tag">/ Philosophie</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <h4 style="font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 40px 0 16px;">2. Interaktions-Elemente</h4>
+        <div class="preview-box" style="flex-direction: row; gap: 48px; align-items: flex-start; justify-content: flex-start;">
+          
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+            <div class="button-showcase">
+              <button class="btn-show primary">Speichern</button>
+              <button class="btn-show">Abbrechen</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Suchbegriff</label>
+            <input type="text" class="form-input" placeholder="Titel eingeben..." />
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Intersection Observer für Navigations-Highlighting in der Sidebar
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('.nav-sidebar li').forEach(li => li.classList.remove('active'));
+          const id = entry.target.getAttribute('id');
+          const link = document.querySelector(`.nav-sidebar a[href="#${id}"]`);
+          if (link) {
+            link.parentElement.classList.add('active');
+          }
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('section[id]').forEach(section => observer.observe(section));
+  </script>
+</body>
+</html>

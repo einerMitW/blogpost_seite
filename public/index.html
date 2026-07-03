@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wireframe - Variante A1: Editorial (Übersicht)</title>
+  <style>
+    :root {
+      /* Edles, philosophisches und kreatives Farbsystem übertragen von B1 */
+      --bg: oklch(96.5% 0.003 70);       /* Alabaster / Feiner warmer Steinton */
+      --surface: oklch(100% 0 0);        /* Reines Weiß für maximalen Kontrast */
+      --fg: oklch(22% 0.01 70);          /* Tiefes Schiefer-Schwarz (organisch, edel) */
+      --muted: oklch(52% 0.008 70);      /* Gedämpftes Grau für Metadaten */
+      --border: oklch(86% 0.006 70);     /* Filigrane, zarte Verbindungslinien */
+      --accent: oklch(45% 0.13 260);     /* Deep Sapphire Blue (Tiefe & Technik) */
+      --accent-soft: oklch(94% 0.015 260);
+      --creative: oklch(62% 0.13 75);    /* Mutes Gold/Ocker (Kreativität & Geist) */
+      --creative-soft: oklch(95% 0.01 75);
+      
+      --font-display: 'Iowan Old Style', Georgia, serif; /* Literarischer Fokus */
+      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+      
+      --radius: 2px; /* Minimaler Radius für präzisen, edlen Schliff */
+      --radius-lg: 4px;
+      
+      --shadow: 0 10px 30px -10px rgba(28, 25, 23, 0.07), 0 1px 3px rgba(28, 25, 23, 0.02);
+      --shadow-hover: 0 16px 40px -12px rgba(28, 25, 23, 0.12), 0 2px 8px rgba(28, 25, 23, 0.04);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    
+    /* Fokus-Indikator für Barrierefreiheit */
+    *:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wireframe-badge {
+      background: var(--fg);
+      color: var(--surface);
+      padding: 8px 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .wireframe-badge a {
+      color: var(--creative);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s ease;
+    }
+    .wireframe-badge a:hover {
+      border-color: var(--creative);
+    }
+
+    .container {
+      max-width: 800px; /* Einspaltiges, zentriertes Layout */
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: normal;
+      font-style: italic;
+      letter-spacing: -0.02em;
+    }
+    .logo-sub {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    .btn-login {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .btn-login:hover {
+      border-color: var(--fg);
+      color: var(--fg);
+      background: var(--bg);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: 60px 0 40px;
+      text-align: center;
+      border-bottom: 1px dashed var(--border);
+    }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .h1 {
+      font-family: var(--font-display);
+      font-size: 40px;
+      line-height: 1.2;
+      margin: 0 0 16px;
+      font-weight: normal;
+      letter-spacing: -0.02em;
+    }
+    .lead {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+
+
+    /* Category Navigation */
+    .filter-section {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    @media (min-width: 600px) {
+      .filter-section {
+        flex-direction: row;
+        align-items: center;
+        gap: 16px;
+      }
+    }
+    .filter-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .tag-btn {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tag-btn:hover {
+      border-color: var(--fg);
+      color: var(--fg);
+      background: var(--bg);
+    }
+    .tag-btn.active {
+      border-color: var(--fg);
+      background: var(--fg);
+      color: var(--surface);
+    }
+    .tag-btn-count {
+      font-size: 10px;
+      opacity: 0.6;
+    }
+
+    /* Essay List */
+    .essay-list {
+      padding: 40px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 32px; /* Großzügige Abstände */
+    }
+
+    /* Essay Cards - Polished like B1 but in single-column Editorial layout */
+    .essay-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      cursor: pointer;
+      position: relative;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
+    }
+    .essay-card:hover, .essay-card:focus-visible {
+      border-color: var(--fg);
+      background: var(--surface);
+    }
+    .essay-card:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: normal;
+      margin: 0;
+      line-height: 1.35;
+      color: var(--fg);
+      letter-spacing: -0.015em;
+    }
+    .essay-card:hover .card-title {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+    }
+
+    .card-preview {
+      color: var(--muted);
+      font-size: 14.5px;
+      line-height: 1.65;
+      margin: 0;
+      max-width: 720px;
+    }
+
+    .card-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      border-top: 1px dashed var(--border);
+      padding-top: 16px;
+    }
+
+    /* Filigrane feine Linien zur Anzeige der Tags */
+    .essay-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: color 0.15s ease;
+      display: inline-block;
+    }
+    .essay-tag:hover {
+      color: var(--accent);
+    }
+    .tag-separator {
+      color: var(--border);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      margin: 0 4px;
+      user-select: none;
+    }
+
+    /* Page Entrance Animations & Motion Core */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .reveal-item {
+      opacity: 0;
+      animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .reveal-delay-1 { animation-delay: 80ms; }
+    .reveal-delay-2 { animation-delay: 160ms; }
+    .reveal-delay-3 { animation-delay: 240ms; }
+    .reveal-delay-4 { animation-delay: 320ms; }
+    .reveal-delay-5 { animation-delay: 400ms; }
+
+    /* Smooth transition for filter buttons */
+    .tag-btn {
+      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-item {
+        animation: fadeInOnly 0.4s ease forwards;
+        animation-delay: 0ms !important;
+      }
+      @keyframes fadeInOnly {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .essay-card {
+        transition: opacity 0.2s ease, border-color 0.2s ease !important;
+        transform: none !important;
+      }
+      .essay-card:hover {
+        transform: none !important;
+      }
+      .tag-btn, .btn-login, .essay-tag {
+        transition: opacity 0.2s ease, border-color 0.2s ease, background-color 0.2s ease !important;
+      }
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      padding: 40px 0;
+      margin-top: 80px;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-badge">
+    <span>[WIREFRAME] Variante A1: Editorial (Zentriertes einspaltiges Layout)</span>
+    <span><a href="index.html">← Zur Varianten-Übersicht</a></span>
+  </div>
+
+  <header class="header reveal-item" data-od-id="header">
+    <div class="container header-inner">
+      <div class="logo">
+        Gedankengang <span class="logo-sub">Journal</span>
+      </div>
+      <div>
+        <a href="admin.html" class="btn-login">Admin Login</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-section" data-od-id="hero">
+      <div class="container">
+        <p class="eyebrow reveal-item reveal-delay-1">Persönliches Journal & Essays</p>
+        <h1 class="h1 reveal-item reveal-delay-2">Fokus auf das geschriebene Wort.</h1>
+        <p class="lead reveal-item reveal-delay-3">Gedanken über Kreativität, Philosophie, Technik und die Gewohnheit des regelmäßigen Schreibens.</p>
+      </div>
+    </section>
+
+    <!-- Category Filters -->
+    <section class="container reveal-item reveal-delay-4" data-od-id="filters">
+      <div class="filter-section">
+        <span class="filter-label">Filter nach Thema:</span>
+        <div class="tag-list" id="tagList">
+          <button class="tag-btn active" onclick="filterByTag('all')">
+            <span>Alle</span>
+            <span class="tag-btn-count" id="allCount">0</span>
+          </button>
+          <!-- Dynamic category tags will load here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Essay List -->
+    <section class="container reveal-item reveal-delay-5" data-od-id="essays">
+      <div class="essay-list" id="essayList">
+        <!-- Dynamic essays will load here -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" data-od-id="footer">
+    <div class="container footer-inner">
+      <span>© Gedankengang Wireframe A1</span>
+      <span>Fokus auf Typografie & Lesefluss</span>
+    </div>
+  </footer>
+
+  <script src="api.js"></script>
+  <script>
+    let activeTag = 'all';
+    let isInitialLoad = true;
+
+    async function renderTags() {
+      const essays = await getEssays();
+      const tags = await getAllTags();
+      const tagList = document.getElementById('tagList');
+      
+      document.getElementById('allCount').innerText = essays.length;
+      
+      tagList.innerHTML = `
+        <button class="tag-btn ${activeTag === 'all' ? 'active' : ''}" onclick="filterByTag('all')">
+          <span>Alle</span>
+          <span class="tag-btn-count">${essays.length}</span>
+        </button>
+      `;
+
+      tags.forEach(tag => {
+        const count = essays.filter(e => e.tags.includes(tag)).length;
+        tagList.innerHTML += `
+          <button class="tag-btn ${activeTag === tag ? 'active' : ''}" onclick="filterByTag('${tag}')">
+            <span># ${tag}</span>
+            <span class="tag-btn-count">${count}</span>
+          </button>
+        `;
+      });
+    }
+
+    async function renderEssays() {
+      const essays = await getEssays();
+      const list = document.getElementById('essayList');
+      list.innerHTML = '';
+
+      const filtered = activeTag === 'all' 
+        ? essays 
+        : essays.filter(e => e.tags.includes(activeTag));
+
+      if (filtered.length === 0) {
+        list.innerHTML = `
+          <div style="text-align: center; padding: 60px; color: var(--muted); border: 1px dashed var(--border); font-family: var(--font-mono); border-radius: var(--radius-lg); background: var(--surface);">
+            Keine Gedanken in dieser Kategorie gefunden.
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach((essay, index) => {
+        const tagHTML = essay.tags.map(t => `<span class="essay-tag" role="button" tabindex="0" onclick="event.stopPropagation(); event.preventDefault(); filterByTag('${t}')">${t}</span>`).join(' <span class="tag-separator">/</span> ');
+        
+        // Text kürzen
+        const previewText = essay.content.length > 220 
+          ? essay.content.substring(0, 220) + '...' 
+          : essay.content;
+
+        const staggerClass = isInitialLoad ? 'reveal-item' : '';
+        const staggerStyle = isInitialLoad ? `animation-delay: ${(index * 60) + 400}ms;` : '';
+
+        // Formatted Date based on ID (static mapper or timestamp conversion)
+        let dateText;
+        if (essay.id === "1") {
+          dateText = "28. Mai 2026";
+        } else if (essay.id === "2") {
+          dateText = "15. April 2026";
+        } else if (essay.id === "3") {
+          dateText = "04. März 2026";
+        } else {
+          const timestamp = parseInt(essay.id);
+          if (!isNaN(timestamp)) {
+            dateText = new Date(timestamp).toLocaleDateString('de-DE', {year: 'numeric', month: 'long', day: 'numeric'});
+          } else {
+            dateText = "Kürzlich veröffentlicht";
+          }
+        }
+
+        list.innerHTML += `
+          <a class="essay-card ${staggerClass}" style="${staggerStyle} view-transition-name: card-${essay.id};" href="read.html?id=${essay.id}" data-od-id="card-${essay.id}">
+            <div class="card-top">
+              <span class="card-readtime">${essay.readTime} Lesezeit</span>
+              <time class="card-date">${dateText}</time>
+            </div>
+            <h2 class="card-title">${essay.title}</h2>
+            <p class="card-preview">${previewText}</p>
+            <div class="card-bottom">
+              ${tagHTML}
+            </div>
+          </a>
+        `;
+      });
+    }
+
+    function filterByTag(tag) {
+      activeTag = tag;
+      if (document.startViewTransition) {
+        document.startViewTransition(() => {
+          renderTags();
+          renderEssays();
+        });
+      } else {
+        renderTags();
+        renderEssays();
+      }
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tagParam = urlParams.get('tag');
+      if (tagParam) {
+        activeTag = tagParam;
+      }
+      renderTags();
+      renderEssays();
+      
+      // Clean up reveal animations after initial page entrance
+      setTimeout(() => {
+        isInitialLoad = false;
+        document.querySelectorAll('.reveal-item').forEach(el => {
+          el.classList.remove('reveal-item', 'reveal-delay-1', 'reveal-delay-2', 'reveal-delay-3', 'reveal-delay-4', 'reveal-delay-5');
+          el.style.opacity = '1';
+        });
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
