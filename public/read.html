@@ -1,319 +1,65 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wireframe - Variante A1: Editorial (Lesen)</title>
-  <style>
-    :root {
-      /* Edles, philosophisches und kreatives Farbsystem übertragen von B1 */
-      --bg: oklch(96.5% 0.003 70);       /* Alabaster / Feiner warmer Steinton */
-      --surface: oklch(100% 0 0);        /* Reines Weiß für maximalen Kontrast */
-      --fg: oklch(22% 0.01 70);          /* Tiefes Schiefer-Schwarz (organisch) */
-      --muted: oklch(52% 0.008 70);      /* Gedämpftes Grau für Metadaten */
-      --border: oklch(86% 0.006 70);     /* Filigrane, zarte Verbindungslinien */
-      --accent: oklch(45% 0.13 260);     /* Deep Sapphire Blue */
-      --accent-soft: oklch(94% 0.015 260);
-      --creative: oklch(62% 0.13 75);    /* Gold/Ocker */
-      --creative-soft: oklch(95% 0.01 75);
-      
-      --font-display: 'Iowan Old Style', Georgia, serif;
-      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
-      
-      --radius: 2px;
-      --radius-lg: 4px;
-      
-      --shadow: 0 10px 30px -10px rgba(28, 25, 23, 0.07), 0 1px 3px rgba(28, 25, 23, 0.02);
-    }
-
-    *, *::before, *::after { box-sizing: border-box; }
-
-    /* Fokus-Indikator für Barrierefreiheit */
-    *:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 3px;
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--fg);
-      font-family: var(--font-body);
-      font-size: 16px;
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .wireframe-badge {
-      background: var(--fg);
-      color: var(--surface);
-      padding: 8px 16px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .wireframe-badge a {
-      color: var(--creative);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.15s ease;
-    }
-    .wireframe-badge a:hover {
-      border-color: var(--creative);
-    }
-
-    .container {
-      max-width: 800px; /* Einspaltiges Lesen */
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    /* Header */
-    .header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-    }
-    .header-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 0;
-    }
-    .logo {
-      font-family: var(--font-display);
-      font-size: 22px;
-      font-weight: normal;
-      font-style: italic;
-      letter-spacing: -0.02em;
-    }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      text-decoration: none;
-      color: var(--fg);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      background: var(--surface);
-      transition: all 0.15s ease;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .back-link:hover, .back-link:focus-visible {
-      border-color: var(--fg);
-      background: var(--bg);
-    }
-
-    /* Nav bar under header */
-    .nav-back-container {
-      padding: 24px 0 8px;
-      display: flex;
-      align-items: center;
-    }
-
-    /* Article Box */
-    .article-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 0;
-      padding: 32px;
-      margin: 16px 0 64px;
-    }
-    @media (min-width: 600px) {
-      .article-box {
-        padding: 48px;
-      }
-    }
-
-    .article-header {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 28px;
-    }
-
-    .article-title {
-      font-family: var(--font-display);
-      font-size: 34px;
-      font-weight: normal;
-      margin: 0;
-      line-height: 1.25;
-      letter-spacing: -0.02em;
-      color: var(--fg);
-    }
-
-    /* Metadaten Matrix */
-    .metadata-table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      font-family: var(--font-mono);
-      font-size: 11px;
-    }
-    .metadata-table td {
-      padding: 10px 14px;
-      border: 1px solid var(--border);
-    }
-    .metadata-table .lbl {
-      color: var(--muted);
-      text-transform: uppercase;
-      width: 120px;
-      letter-spacing: 0.08em;
-    }
-
-    .article-body {
-      font-size: 16.5px;
-      color: var(--fg);
-      line-height: 1.75;
-      margin-top: 28px;
-    }
-    .article-body p {
-      margin: 0 0 24px;
-    }
-
-    /* Filigrane feine Linien zur Anzeige der Tags */
-    .essay-tag {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-right: 8px;
-      display: inline-block;
-      cursor: pointer;
-      text-decoration: none;
-      transition: color 0.15s ease;
-    }
-    .essay-tag:hover {
-      color: var(--accent);
-    }
-
-    /* Footer */
-    .footer {
-      border-top: 1px solid var(--border);
-      padding-top: 20px;
-      display: flex;
-      justify-content: space-between;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--muted);
-    }
-  </style>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Gedanke Lesen — Gedankengang</title>
+	<link rel="stylesheet" href="style.css" />
+	<script src="api.js" defer></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+	<script src="read.js" defer></script>
 </head>
 <body>
-  <div class="wireframe-badge">
-    <span>[WIREFRAME] Variante A1: Leseansicht (Editorial)</span>
-    <span><a href="index.html">← Zur Varianten-Übersicht</a></span>
-  </div>
+	<div class="wireframe-badge">
+		<span>Gedankengang Leseansicht</span>
+		<span><a href="index.html">← Zurück zur Übersicht</a></span>
+	</div>
 
-  <header class="header" data-od-id="header">
-    <div class="container header-inner">
-      <div class="logo">Gedankengang</div>
-      <a href="index.html" class="back-link">← Zurück zur Liste</a>
-    </div>
-  </header>
+	<header class="header">
+		<div class="container header-inner">
+			<div class="logo">Gedankengang</div>
+			<a href="index.html" class="back-link">← Zur Liste</a>
+		</div>
+	</header>
 
-  <main class="container">
-    <div class="nav-back-container">
-      <a href="index.html" class="back-link">← Alle Essays</a>
-    </div>
+	<main class="container">
+		<div class="nav-back-container">
+			<a href="index.html" class="back-link">← Alle Essays</a>
+		</div>
 
-    <div class="article-box">
-      <article data-od-id="essay-read">
-        <div class="article-header">
-          <h1 class="article-title" id="articleTitle">Lade Essay...</h1>
-          
-          <!-- Metadaten Matrix -->
-          <table class="metadata-table">
-            <tr>
-              <td class="lbl">Veröffentlicht</td>
-              <td id="metaDate" style="font-family: var(--font-mono);">-</td>
-              <td class="lbl">Lesezeit</td>
-              <td id="metaReadTime" style="font-family: var(--font-mono);">-</td>
-            </tr>
-            <tr>
-              <td class="lbl">Themen</td>
-              <td id="metaTags" colspan="3">-</td>
-            </tr>
-          </table>
-        </div>
-
-        <div class="article-body" id="articleBody">
-          <!-- Dynamisch geladen -->
-        </div>
-      </article>
-
-      <!-- Footer -->
-      <footer class="footer" data-od-id="footer">
-        <span>© Gedankengang Wireframe A1</span>
-        <span>Lese-Modus</span>
-      </footer>
-    </div>
-  </main>
-
-  <script src="api.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script>
-	document.addEventListener('DOMContentLoaded', async () => {
-		const url_params = new URLSearchParams(window.location.search);
-		const id = url_params.get('id') || '1';
-		
-		const essays = await get_essays();
-		const essay = essays.find(e => e.id === id || e.id.toString() === id) || essays[0];
-
-		if (essay) {
-			document.title = `${essay.title} · Gedankengang`;
-			document.getElementById('articleTitle').innerText = essay.title;
-			
-			let date_text;
-			if (essay.id === 1 || essay.id === "1") {
-				date_text = "28. Mai 2026";
-			} else if (essay.id === 2 || essay.id === "2") {
-				date_text = "15. April 2026";
-			} else if (essay.id === 3 || essay.id === "3") {
-				date_text = "04. März 2026";
-			} else {
-				const timestamp = parseInt(essay.id);
-				if (!isNaN(timestamp)) {
-					date_text = new Date(timestamp).toLocaleDateString('de-DE', {year: 'numeric', month: 'long', day: 'numeric'});
-				} else {
-					date_text = "Kürzlich veröffentlicht";
-				}
-			}
-			document.getElementById('metaDate').innerText = date_text;
-			document.getElementById('metaReadTime').innerText = (essay.read_time || 0) + ' Min';
-			
-			document.getElementById('metaTags').innerHTML = essay.tags.map(t => `
-				<a href="index.html?tag=${t}" class="essay-tag">${t}</a>
-			`).join(' <span class="tag-separator" style="color: var(--border); font-family: var(--font-mono); font-size: 10px; margin: 0 4px; user-select: none;">/</span> ');
-
-			document.getElementById("articleBody").innerHTML = marked.parse(essay.content || '');
-		} else {
-			document.title = "Gedanke nicht gefunden · Gedankengang";
-			document.getElementById('articleTitle').innerText = "Gedanke nicht gefunden";
-			document.getElementById('metaDate').innerText = "—";
-			document.getElementById('metaReadTime').innerText = "—";
-			document.getElementById('metaTags').innerHTML = "—";
-			document.getElementById('articleBody').innerHTML = `
-				<div style="text-align: center; padding: 40px 20px; color: var(--muted); border: 1px solid var(--border); font-family: var(--font-mono); background: var(--bg); margin-top: 20px;">
-					Dieses Essay existiert nicht oder die Datenbank ist leer.<br><br>
-					<a href="index.html" style="color: var(--accent); text-decoration: underline; font-family: var(--font-mono); font-size: 13px;">← Zurück zur Übersicht</a>
+		<div class="article-box">
+			<article>
+				<div class="article-header">
+					<h1 class="article-title" id="articleTitle">Lade Essay...</h1>
+					
+					<!-- Metadaten Matrix -->
+					<table class="metadata-table">
+						<tr>
+							<td class="lbl">Veröffentlicht</td>
+							<td id="metaDate">-</td>
+							<td class="lbl">Lesezeit</td>
+							<td id="metaReadTime">-</td>
+						</tr>
+						<tr>
+							<td class="lbl">Themen</td>
+							<td id="metaTags" colspan="3">-</td>
+						</tr>
+					</table>
 				</div>
-			`;
-		}
-	});
-  </script>
+
+				<div class="article-body" id="articleBody">
+					<!-- Dynamisch geladen -->
+				</div>
+			</article>
+
+			<!-- Footer -->
+			<footer class="footer">
+				<div class="container footer-inner">
+					<span>© Gedankengang Journal</span>
+					<span>Lese-Modus</span>
+				</div>
+			</footer>
+		</div>
+	</main>
 </body>
 </html>

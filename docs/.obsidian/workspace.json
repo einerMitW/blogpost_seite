@@ -49,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "fe-design-tokens.",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -70,7 +70,8 @@
               "title": "Lesezeichen"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -178,6 +179,11 @@
   },
   "active": "c5e2b033e6e658b2",
   "lastOpenFiles": [
+    "fe-animations.md",
+    "fe-admin-layout.md",
+    "docs/fe-admin-logic.md",
+    "docs/fe-design-tokens.md",
+    "docs",
     "server-init.md",
     "fe-read-rendering.md",
     "fe-read-layout.md",
@@ -185,9 +191,7 @@
     "fe-overview-layout.md",
     "fe-design-tokens.md",
     "fe-api-client.md",
-    "fe-animations.md",
     "fe-admin-logic.md",
-    "fe-admin-layout.md",
     "db-schema.md",
     "db-connection.md",
     "auth-middleware.md",

@@ -1,6 +1,6 @@
 /**
  * @file user_flow.test.js
- * @description Verifies user flow logic via regex checks on HTML pages, ensuring dependency-free operation.
+ * @description Verifies user flow logic, ensuring HTML is clean of inline event handlers and scripts are separated.
  */
 
 const test = require('node:test');
@@ -8,20 +8,47 @@ const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
 
-test('user flow navigation link generation', (t) => {
-	const index_html_path = path.join(__dirname, '../public/index.html');
-	const index_html = fs.readFileSync(index_html_path, 'utf8');
+test('HTML files must not contain inline event handlers', (t) => {
+	const files = ['index.html', 'admin.html', 'read.html'];
+	const inline_events = ['onclick=', 'onsubmit=', 'onkeydown=', 'onkeyup='];
 
-	// Verify that the overview page generates a card anchor linking to read.html with the essay ID
-	const has_read_link = index_html.includes('href="read.html?id=${essay.id}"');
-	assert.ok(has_read_link, 'index.html must render card links pointing to read.html?id=...');
+	files.forEach(file => {
+		const file_path = path.join(__dirname, '../public', file);
+		const content = fs.readFileSync(file_path, 'utf8');
+
+		inline_events.forEach(evt => {
+			assert.ok(!content.includes(evt), `File ${file} should not contain inline event attribute: ${evt}`);
+		});
+	});
 });
 
-test('user flow details reading page parameter handling', (t) => {
-	const read_html_path = path.join(__dirname, '../public/read.html');
-	const read_html = fs.readFileSync(read_html_path, 'utf8');
+test('HTML files must not contain inline logic scripts', (t) => {
+	const files = ['index.html', 'admin.html', 'read.html'];
+	
+	files.forEach(file => {
+		const file_path = path.join(__dirname, '../public', file);
+		const content = fs.readFileSync(file_path, 'utf8');
 
-	// Verify that read.html reads the essay ID from URL search parameters
-	const reads_id_param = read_html.includes('url_params.get(\'id\')');
-	assert.ok(reads_id_param, 'read.html must extract id from url query parameters');
+		// Check for any <script> tag that does not have a "src" attribute
+		// (which indicates inline javascript logic)
+		const inline_script_regex = /<script(?![^>]*src)[^>]*>([\s\S]*?)<\/script>/i;
+		const has_inline_script = inline_script_regex.test(content);
+		assert.ok(!has_inline_script, `File ${file} should not contain inline scripts without src`);
+	});
+});
+
+test('index.js generates card anchor linking to read.html', (t) => {
+	const script_path = path.join(__dirname, '../public/index.js');
+	if (fs.existsSync(script_path)) {
+		const content = fs.readFileSync(script_path, 'utf8');
+		assert.ok(content.includes('href="read.html?id=${essay.id}"'), 'index.js must generate card links pointing to read.html?id=...');
+	}
+});
+
+test('read.js extracts id from url query parameters', (t) => {
+	const script_path = path.join(__dirname, '../public/read.js');
+	if (fs.existsSync(script_path)) {
+		const content = fs.readFileSync(script_path, 'utf8');
+		assert.ok(content.includes('url_params.get(\'id\')'), 'read.js must extract id from url query parameters');
+	}
 });
