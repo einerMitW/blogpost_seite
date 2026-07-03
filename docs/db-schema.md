@@ -32,3 +32,4 @@ To provide default essays upon first setup:
 ## Related pages
 - [[docs/db-connection.md]]
 - [[docs/api-essays-post.md]]
+- [[docs/tests-db.md]]

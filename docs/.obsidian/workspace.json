@@ -11,14 +11,10 @@
             "id": "c5e2b033e6e658b2",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "tests-db.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "tests-db"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph-Ansicht"
             }
           }
         ]
@@ -95,7 +91,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "tests-db.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -105,7 +100,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Rückverweise auf tests-db"
+              "title": "Rückverweise"
             }
           },
           {
@@ -114,12 +109,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "tests-db.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Ausgehende Links von tests-db öffnen"
+              "title": "Ausgehende Links"
             }
           },
           {
@@ -157,13 +151,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "tests-db.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Gliederung von tests-db"
+              "title": "Gliederung"
             }
           }
         ]
@@ -186,9 +179,9 @@
   },
   "active": "c5e2b033e6e658b2",
   "lastOpenFiles": [
+    "tests-db.md",
     "tests-user-flow.md",
     "tests-server.md",
-    "tests-db.md",
     "fe-animations.md",
     "fe-admin-layout.md",
     "docs/fe-admin-logic.md",

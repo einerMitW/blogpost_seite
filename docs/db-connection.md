@@ -15,3 +15,4 @@ The database file is located at `data/blog.db`. Upon loading, the module creates
 ## Related pages
 - [[docs/db-schema.md]]
 - [[docs/server-init.md]]
+- [[docs/tests-db.md]]

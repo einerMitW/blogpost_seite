@@ -24,3 +24,4 @@ All routes and controllers are mounted directly on this server instance.
 - [[docs/db-connection.md]]
 - [[docs/auth-login.md]]
 - [[docs/auth-middleware.md]]
+- [[docs/tests-server.md]]
