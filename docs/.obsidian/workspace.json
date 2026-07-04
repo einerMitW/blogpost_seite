@@ -70,8 +70,7 @@
               "title": "Lesezeichen"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -179,29 +178,34 @@
   },
   "active": "c5e2b033e6e658b2",
   "lastOpenFiles": [
+    "index.md",
+    "fe-read-layout.md",
+    "fe-read-rendering.md",
+    "docs/db-connection.md",
+    "docs/tests-db.md",
+    "docs/fe-admin-logic.md",
+    "docs/fe-admin-layout.md",
+    "docs/fe-overview-layout.md",
+    "db-backup.md",
+    "tests/server.test.js.md",
+    "tests",
+    "fe-api-client.md",
+    "server/db.js.md",
+    "server",
+    "docs/server-init.md",
     "tests-db.md",
-    "tests-user-flow.md",
-    "tests-server.md",
+    "tests-backup.md",
+    "server-init.md",
+    "security-audit-log.md",
+    "fe-overview-rendering.md",
+    "fe-design-tokens.md",
     "fe-animations.md",
     "fe-admin-layout.md",
-    "docs/fe-admin-logic.md",
-    "docs/fe-design-tokens.md",
-    "docs",
-    "server-init.md",
-    "fe-read-rendering.md",
-    "fe-read-layout.md",
-    "fe-overview-rendering.md",
-    "fe-overview-layout.md",
-    "fe-design-tokens.md",
-    "fe-api-client.md",
-    "fe-admin-logic.md",
-    "db-schema.md",
-    "db-connection.md",
     "auth-middleware.md",
-    "auth-login.md",
     "api-essays-post.md",
     "api-essays-get.md",
-    "api-essays-get-single.md",
-    "api-essays-delete.md"
+    "api-essays-delete.md",
+    "docs/fe-design-tokens.md",
+    "docs"
   ]
 }

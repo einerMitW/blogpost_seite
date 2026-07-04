@@ -11,7 +11,9 @@ const path = require('path');
  * @returns {void}
  */
 const run_backup = () => {
-	const db_file = path.join(__dirname, '../data/blog.db');
+	const db_file = process.env.NODE_ENV === 'test'
+		? path.join(__dirname, '../data/blog_test.db')
+		: path.join(__dirname, '../data/blog.db');
 	const backups_dir = path.join(__dirname, '../data/backups');
 
 	if (!fs.existsSync(db_file)) {

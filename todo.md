@@ -1,0 +1,2 @@
+- anpassen der wiki update routine auf Atomare Notizen
+- Skill für Implementierungsplan erstellen

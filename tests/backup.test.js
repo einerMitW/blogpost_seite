@@ -24,7 +24,7 @@ test('database backup and rotation verification', (t) => {
 	if (!fs.existsSync(db_dir)) {
 		fs.mkdirSync(db_dir, { recursive: true });
 	}
-	const db_file = path.join(db_dir, 'blog.db');
+	const db_file = path.join(db_dir, 'blog_test.db');
 	fs.writeFileSync(db_file, 'dummy db content');
 
 	// Require the backup script
@@ -54,4 +54,7 @@ test('database backup and rotation verification', (t) => {
 
 	// Clean up
 	fs.rmSync(backups_dir, { recursive: true, force: true });
+	if (fs.existsSync(db_file)) {
+		fs.unlinkSync(db_file);
+	}
 });
