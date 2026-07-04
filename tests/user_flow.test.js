@@ -52,3 +52,17 @@ test('read.js extracts id from url query parameters', (t) => {
 		assert.ok(content.includes('url_params.get(\'id\')'), 'read.js must extract id from url query parameters');
 	}
 });
+
+test('read.html includes DOMPurify via script tag', (t) => {
+	const file_path = path.join(__dirname, '../public/read.html');
+	const content = fs.readFileSync(file_path, 'utf8');
+	assert.ok(content.includes('purify.min.js') || content.includes('DOMPurify'), 'read.html should include DOMPurify script');
+});
+
+test('read.js uses DOMPurify to sanitize markdown output', (t) => {
+	const script_path = path.join(__dirname, '../public/read.js');
+	if (fs.existsSync(script_path)) {
+		const content = fs.readFileSync(script_path, 'utf8');
+		assert.ok(content.includes('DOMPurify.sanitize'), 'read.js must sanitize markdown with DOMPurify.sanitize');
+	}
+});

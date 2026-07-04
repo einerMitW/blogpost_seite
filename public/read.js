@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 			<a href="index.html?tag=${t}" class="essay-tag">${t}</a>
 		`).join(' <span class="tag-separator" style="color: var(--border); font-family: var(--font-mono); font-size: 10px; margin: 0 4px; user-select: none;">/</span> ');
 
-		document.getElementById("articleBody").innerHTML = marked.parse(essay.content || '');
+		document.getElementById("articleBody").innerHTML = DOMPurify.sanitize(marked.parse(essay.content || ''));
 	} else {
 		document.title = "Gedanke nicht gefunden · Gedankengang";
 		document.getElementById('articleTitle').innerText = "Gedanke nicht gefunden";
