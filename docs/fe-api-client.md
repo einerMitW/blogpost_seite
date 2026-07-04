@@ -4,7 +4,7 @@
 
 **Sources**: [[public/api.js]]
 
-**Last updated**: 2026-07-03
+**Last updated**: 2026-07-04
 
 ---
 
@@ -13,6 +13,7 @@ The file `api.js` exposes core asynchronous JavaScript functions that wrap fetch
 ### Provided Functions:
 
 - `async get_essays()`: Fetches the array of essays via `GET /api/essays` ([[docs/api-essays-get.md]]) and processes the tags property. If `tags` is a comma-separated string, it splits it into a clean array; otherwise, defaults to an empty array.
+- `async get_essay_by_id(id)`: Fetches a single essay by its ID via `GET /api/essays/:id` ([[docs/api-essays-get-single.md]]). Normalizes the tags property and returns the single essay object, or null on error.
 - `async get_all_tags()`: Calls `get_essays()` and uses a `Set` to collect and return a list of unique tags used across all essays.
 - `async add_essay(essay)`: Sends a `POST /api/essays` ([[docs/api-essays-post.md]]) request containing the essay object (mapping `tags` back to a comma-separated string). Shows an alert on failure.
 - `async delete_essay(id)`: Sends a `DELETE /api/essays/:id` ([[docs/api-essays-delete.md]]) request to remove the essay. Shows an alert on failure.

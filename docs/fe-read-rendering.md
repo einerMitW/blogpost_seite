@@ -4,19 +4,21 @@
 
 **Sources**: [[public/read.js]]
 
-**Last updated**: 2026-07-03
+**Last updated**: 2026-07-04
 
 ---
 
 ### Initial Lifecycle
 Upon DOM readiness, the code:
-1. Parses URL search parameters using `URLSearchParams` to extract the `id` of the article.
-2. Invokes `get_essays()` ([[docs/fe-api-client.md]]) to query the local client database cache.
-3. Searches for the essay matching the query ID.
+1.  Parses URL search parameters using `URLSearchParams` to extract the `id` of the article (defaults to `'1'`).
+2.  Invokes `get_essay_by_id(id)` ([[docs/fe-api-client.md]]) to query the backend specifically for that essay's full details (avoiding loading other essays).
 
 ### Rendering Pipeline
 - **Metadata**: Populates the table cells (`#metaDate`, `#metaReadTime`, `#metaTags`).
-- **Markdown Parsing**: Passes the essay content directly to the `marked.parse()` utility from the imported `marked.js` library. The resulting HTML is inserted directly into the `#articleBody` element.
+- **Markdown Parsing & Sanitization**: 
+    1.  Passes the essay content to `marked.parse()` to convert Markdown text into raw HTML.
+    2.  Wraps the raw HTML inside `DOMPurify.sanitize()` to filter out malicious scripts or inline event handlers.
+    3.  Inserts the sanitized HTML directly into the `#articleBody` element, protecting against Cross-Site Scripting (XSS).
 - **Error States**: If the essay is not found, headings and metadata cells show fallbacks, and a recovery link back to the homepage is displayed.
 
 ## Related pages
