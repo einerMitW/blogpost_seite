@@ -61,29 +61,7 @@ a {
 	text-decoration: none;
 }
 
-/* Dev Wireframe Badge */
-.wireframe-badge {
-	background: var(--fg);
-	color: var(--surface);
-	padding: 8px 16px;
-	font-family: var(--font-mono);
-	font-size: 11px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	border-bottom: 1px solid var(--border);
-	text-transform: uppercase;
-	letter-spacing: 0.08em;
-}
-.wireframe-badge a {
-	color: var(--creative);
-	text-decoration: none;
-	border-bottom: 1px solid transparent;
-	transition: border-color 0.15s ease;
-}
-.wireframe-badge a:hover {
-	border-color: var(--creative);
-}
+
 
 /* ==========================================================================
 	3. STRUCTURE & LAYOUT (Single-Column Centered)
