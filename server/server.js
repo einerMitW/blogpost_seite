@@ -164,7 +164,7 @@ app.get('/api/auth/status', (req, res) => {
  */
 app.get('/api/essays', (req, res) => {
 	try {
-		const essays = db.prepare('SELECT id, title, content, tags, read_time, created_at FROM essays ORDER BY created_at DESC').all();
+		const essays = db.prepare("SELECT id, title, CASE WHEN LENGTH(content) > 220 THEN SUBSTR(content, 1, 220) || '...' ELSE content END AS preview, tags, read_time, created_at FROM essays ORDER BY created_at DESC").all();
 		res.json(essays);
 	} catch (err) {
 		res.status(500).json({ error: err.message });

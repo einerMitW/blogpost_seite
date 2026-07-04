@@ -1,0 +1,9 @@
+node_modules/
+data/
+tests/
+.git/
+.env
+Plan/
+Identity/
+Context/
+Skills/

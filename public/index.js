@@ -60,9 +60,7 @@ async function render_essays() {
 	filtered.forEach((essay, index) => {
 		const tag_html = essay.tags.map(t => `<span class="essay-tag" role="button" tabindex="0" data-tag="${t}">${t}</span>`).join(' <span class="tag-separator">/</span> ');
 		
-		const preview_text = (essay.content && essay.content.length > 220)
-			? essay.content.substring(0, 220) + '...' 
-			: (essay.content || '');
+		const preview_text = essay.preview || '';
 
 		const stagger_class = is_initial_load ? 'reveal-item' : '';
 		const stagger_style = is_initial_load ? `animation-delay: ${(index * 60) + 400}ms;` : '';

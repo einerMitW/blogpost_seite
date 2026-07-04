@@ -66,3 +66,12 @@ test('read.js uses DOMPurify to sanitize markdown output', (t) => {
 		assert.ok(content.includes('DOMPurify.sanitize'), 'read.js must sanitize markdown with DOMPurify.sanitize');
 	}
 });
+
+test('read.js fetches specific essay by id rather than loading all essays', (t) => {
+	const script_path = path.join(__dirname, '../public/read.js');
+	if (fs.existsSync(script_path)) {
+		const content = fs.readFileSync(script_path, 'utf8');
+		assert.ok(content.includes('get_essay_by_id'), 'read.js must fetch the essay using get_essay_by_id');
+		assert.ok(!content.includes('get_essays()'), 'read.js must not load the entire list of essays');
+	}
+});

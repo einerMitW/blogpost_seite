@@ -184,6 +184,45 @@ test('audit logging - check audit entries', async (t) => {
 	assert.ok(log_content.includes('login') || log_content.includes('Login'), 'Audit log should contain login attempt message');
 });
 
+test('api - get essays list does not contain full content but contains preview', async (t) => {
+	// Insert a test essay with long content
+	db.prepare('DELETE FROM essays').run();
+	const long_content = 'Word '.repeat(100);
+	db.prepare('INSERT INTO essays (title, content, tags, read_time) VALUES (?, ?, ?, ?)').run(
+		'Long Essay Title',
+		long_content,
+		'test',
+		5
+	);
+
+	const res = await fetch(`${base_url}/api/essays`);
+	assert.strictEqual(res.status, 200);
+	const data = await res.json();
+	
+	assert.ok(data.length > 0);
+	const essay = data[0];
+	assert.strictEqual(essay.content, undefined, 'Essays list should not contain full content');
+	assert.ok(essay.preview !== undefined, 'Essays list should contain preview');
+	assert.ok(essay.preview.includes('...'), 'Preview should be truncated with ...');
+});
+
+test('api - get single essay returns full content', async (t) => {
+	db.prepare('DELETE FROM essays').run();
+	const content = 'This is the full body of the essay.';
+	const result = db.prepare('INSERT INTO essays (title, content, tags, read_time) VALUES (?, ?, ?, ?)').run(
+		'Single Essay',
+		content,
+		'test',
+		5
+	);
+	const essay_id = result.lastInsertRowid;
+
+	const res = await fetch(`${base_url}/api/essays/${essay_id}`);
+	assert.strictEqual(res.status, 200);
+	const essay = await res.json();
+	assert.strictEqual(essay.content, content, 'Single essay fetch should return full content');
+});
+
 test('rate limiting - login endpoint limit', async (t) => {
 	// We make 15 login requests. Since limit is 10, the subsequent ones should return 429.
 	let status_codes = [];

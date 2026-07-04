@@ -7,8 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const url_params = new URLSearchParams(window.location.search);
 	const id = url_params.get('id') || '1';
 	
-	const essays = await get_essays();
-	const essay = essays.find(e => e.id === id || e.id.toString() === id) || essays[0];
+	const essay = await get_essay_by_id(id);
 
 	if (essay) {
 		document.title = `${essay.title} · Gedankengang`;

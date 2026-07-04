@@ -21,6 +21,23 @@ async function get_essays() {
 }
 
 /**
+ * Fetches a single essay by ID.
+ * @param {number|string} id - The ID of the essay.
+ * @returns {Promise<Object|null>} The essay object or null.
+ */
+async function get_essay_by_id(id) {
+	const res = await fetch('/api/essays/' + id);
+	if (!res.ok) return null;
+	const e = await res.json();
+	if (typeof e.tags === 'string') {
+		e.tags = e.tags.split(',').map(t => t.trim()).filter(Boolean);
+	} else if (!e.tags) {
+		e.tags = [];
+	}
+	return e;
+}
+
+/**
  * Extracts all unique tags from the existing essays.
  * @returns {Promise<Array<string>>} List of unique tag strings.
  */

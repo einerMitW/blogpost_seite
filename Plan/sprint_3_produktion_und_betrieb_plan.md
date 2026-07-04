@@ -1,26 +1,34 @@
-# Implementierungsplan: Sprint 3 — Produktion & Betrieb
+# Implementierungsplan: Sprint 3 — Produktion, Betrieb & API-Optimierung (Überarbeitet)
 
-Dieses Dokument beschreibt die geplanten Erweiterungen zur Produktionsbereitschaft und zum Betrieb des "Gedankengang Journals" gemäß den Richtlinien in [standards.md](file:///C:/Projekte/blogpost_seite/Context/standards.md) und der Ist-Analyse in [developer_dialog.md](file:///C:/Projekte/blogpost_seite/Context/developer_dialog.md).
+Dieses Dokument beschreibt die überarbeitete Vorgehensweise für Sprint 3. Auf klassisches Paging (Seiten-Navigation) wird verzichtet, um das minimalistische, endlos scrollbare Design beizubehalten und Overengineering zu vermeiden. Stattdessen wird die API optimiert, sodass Metadaten und Beitragsinhalte getrennt und effizient übertragen werden.
 
 ---
 
 ## 1. Beschreibung der Änderungen
 
-### A. Paginierung auf der Startseite
-*   **Ziel**: Performance-Optimierung bei steigender Beitragsanzahl. Es sollen nicht alle Essays auf einmal geladen werden.
-*   **API-Erweiterung**: 
-    *   `GET /api/essays` akzeptiert die optionalen Query-Parameter `page` und `limit` (z.B. `/api/essays?page=1&limit=5`).
-    *   Das Backend liefert ein JSON-Objekt zurück, das sowohl die Liste der Essays für die aktuelle Seite (`essays`) als auch Metadaten (`total_count`, `total_pages`, `current_page`) enthält.
-*   **Frontend-Erweiterung**:
-    *   Ergänzung von Navigations-Buttons ("Ältere Beiträge" / "Neuere Beiträge") am unteren Ende der Startseite.
-    *   Die Buttons laden die entsprechenden Seiten über die API nach und aktualisieren die Kachel-Ansicht.
+### A. API-Optimierung (Datenminimierung)
+*   **Ziel**: Reduzierung der Payload bei der Artikelliste, ohne das scrollbare Design zu zerstören.
+*   **Endpunkt `GET /api/essays`**:
+    *   Liefert nicht mehr den kompletten Beitragsinhalt (`content`) aller Essays.
+    *   Die SQL-Abfrage wird auf Metadaten beschränkt: `id, title, tags, read_time, created_at`.
+    *   Um den Kachel-Vorschautext zu erhalten, wird die SQLite-Funktion `SUBSTR(content, 1, 220) AS preview` genutzt. Dadurch werden pro Essay nur ca. 220 Zeichen Vorschau übertragen statt potenziell megabytelanger Texte.
+*   **Endpunkt `GET /api/essays/:id`**:
+    *   Liefert den vollständigen Datensatz inklusive des ungekürzten `content` für die Detailansicht.
+
+### B. Frontend-Korrektur (Lesemodus)
+*   **Ziel**: Behebung einer Ineffizienz im Lesemodus.
+*   **Änderung in [read.js](file:///C:/Projekte/blogpost_seite/public/read.js)**:
+    *   Derzeit lädt die Detailansicht über `get_essays()` die *gesamte* Liste aller Beiträge herunter, um einen einzelnen Beitrag clientseitig zu suchen.
+    *   Dies wird abgeändert: Es wird gezielt der API-Endpunkt `GET /api/essays/:id` für den gewünschten Beitrag aufgerufen.
+*   **Änderung in [api.js](file:///C:/Projekte/blogpost_seite/public/api.js)**:
+    *   Hinzufügen einer Funktion `get_essay_by_id(id)` zum Abruf eines einzelnen Beitrags.
 
 ### B. Backup-Skript
 *   **Ziel**: Schutz vor Datenverlust durch automatische, zeitgesteuerte Backups der SQLite-Datenbank.
 *   **Verhalten**:
     *   Ein Node.js-Skript `scripts/backup.js` kopiert die Datenbankdatei `data/blog.db` in ein frei konfigurierbares Backup-Verzeichnis (z. B. `data/backups/`).
     *   Der Dateiname enthält den Zeitstempel (z. B. `backup_2026-07-04_12-30-00.db`).
-    *   Es behält nur die letzten 10 Backups und löscht ältere Dateien automatisch (Rotation).
+    *   Es behält nur die letzten 10 Backups und löscht ältere Dateien (Rotationsprinzip).
 
 ### C. Docker-Konfiguration (Containerisierung)
 *   **Ziel**: Einfaches, reproduzierbares Deployment auf einem beliebigen VPS.
@@ -36,8 +44,8 @@ Dieses Dokument beschreibt die geplanten Erweiterungen zur Produktionsbereitscha
 Wir fügen Tests hinzu, um die neuen Anforderungen abzusichern:
 
 1.  **In [tests/server.test.js](file:///C:/Projekte/blogpost_seite/tests/server.test.js)**:
-    *   *Test 1*: Lege 7 Test-Essays in der Test-Datenbank an. Rufe `/api/essays?page=1&limit=5` ab. Verifiziere, dass genau 5 Essays zurückgegeben werden und das Metadaten-Objekt `total_count: 7` enthält.
-    *   *Test 2*: Rufe `/api/essays?page=2&limit=5` ab. Verifiziere, dass die verbleibenden 2 Essays zurückgegeben werden.
+    *   *Test 1*: Erstelle ein Essay mit sehr langem Text (z.B. 1000 Wörter). Rufe `GET /api/essays` ab. Prüfe, ob die Eigenschaft `content` **nicht** existiert, sondern stattdessen `preview` vorhanden ist und maximal 223 Zeichen (220 + "...") lang ist.
+    *   *Test 2*: Rufe `GET /api/essays/:id` ab. Prüfe, ob der ungekürzte `content` vollständig zurückgegeben wird.
 2.  **In einem neuen Test [tests/backup.test.js](file:///C:/Projekte/blogpost_seite/tests/backup.test.js)**:
     *   *Test 3*: Führe die Backup-Funktion aus `scripts/backup.js` programmatisch aus. Prüfe, ob im Backup-Verzeichnis eine Kopie der DB-Datei mit dem korrekten Zeitstempel-Format erstellt wurde.
     *   *Test 4*: Führe das Backup 12 Mal aus und prüfe, ob durch die Rotationslogik exakt 10 Backup-Dateien im Ordner verbleiben.
@@ -48,16 +56,33 @@ Wir fügen Tests hinzu, um die neuen Anforderungen abzusichern:
 
 ### Schritt 2.2: Grüne Phase (Implementierung)
 1.  **Backend anpassen in [server.js](file:///C:/Projekte/blogpost_seite/server/server.js)**:
-    *   Modifiziere den Route-Handler für `GET /api/essays`, um `page` (Standard: 1) und `limit` (Standard: unbegrenzt, um Rückwärtskompatibilität des MVP zu wahren) aus `req.query` zu parsen.
-    *   Führe zwei Queries aus: Eine `SELECT COUNT(*) as count FROM essays` zur Ermittlung der Gesamtzahl, und eine `SELECT ... LIMIT ? OFFSET ?` für die Beitragsliste.
-2.  **Frontend anpassen in [index.js](file:///C:/Projekte/blogpost_seite/public/index.js)**:
-    *   Füge Paginierungs-Buttons in [index.html](file:///C:/Projekte/blogpost_seite/public/index.html) hinzu.
-    *   Passe `render_essays` an, um den Seitenparameter beim API-Call mitzugeben und den Zustand der Navigationsbuttons (aktiv/inaktiv) zu steuern.
-3.  **Backup-Skript erstellen**:
-    *   Erstelle `scripts/backup.js`. Nutze das Node-interne `fs`-Modul zum Kopieren und Filtern der Verzeichnisinhalte (Rotation).
-4.  **Docker-Dateien erstellen**:
-    *   Erstelle `Dockerfile` im Root-Verzeichnis. Stelle sicher, dass der Port `3000` freigegeben und das Arbeitsverzeichnis auf `/app` gesetzt ist.
-    *   Erstelle `docker-compose.yml` mit persistentem Volume-Mapping: `./data:/app/data`.
+    *   Passe `GET /api/essays` an:
+        ```javascript
+        const essays = db.prepare(`
+            SELECT id, title, SUBSTR(content, 1, 220) AS preview, tags, read_time, created_at 
+            FROM essays 
+            ORDER BY created_at DESC
+        `).all();
+        ```
+2.  **API Client anpassen in [api.js](file:///C:/Projekte/blogpost_seite/public/api.js)**:
+    *   Passe `get_essays()` an, da die Vorschau bereits im Objekt als `preview` geliefert wird.
+    *   Füge `get_essay_by_id(id)` hinzu:
+        ```javascript
+        async function get_essay_by_id(id) {
+            const res = await fetch(`/api/essays/` + id);
+            if (!res.ok) return null;
+            const e = await res.json();
+            if (typeof e.tags === 'string') {
+                e.tags = e.tags.split(',').map(t => t.trim()).filter(Boolean);
+            }
+            return e;
+        }
+        ```
+3.  **Frontend anpassen**:
+    *   In [index.js](file:///C:/Projekte/blogpost_seite/public/index.js) den Vorschau-Zuweisungscode auf `essay.preview` anpassen.
+    *   In [read.js](file:///C:/Projekte/blogpost_seite/public/read.js) den Abruf auf `get_essay_by_id(id)` umstellen.
+4.  **Backup-Skript erstellen** in `scripts/backup.js`.
+5.  **Docker-Dateien erstellen** (`Dockerfile` und `docker-compose.yml`).
 
 *Ausführen der Tests via `npm test` -> Alle Tests müssen erfolgreich durchlaufen.*
 
